@@ -25,12 +25,10 @@
 
 ## 快速开始
 
-```bash
-npm install
-npm run dev
-```
+- **Mac**：双击项目文件夹中的 `启动-Mac.command`
+- **Windows**：双击项目文件夹中的 `启动-Windows.bat`
 
-浏览器打开 `http://localhost:5173` 即可预览。
+首次运行会自动安装依赖并构建，完成后浏览器会自动打开 `http://localhost:4000`。
 
 ---
 
