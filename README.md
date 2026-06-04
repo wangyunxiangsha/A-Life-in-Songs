@@ -4,6 +4,14 @@
 
 ---
 
+## 预览截图
+
+| 首屏 · Hero | 章节 · Seasons |
+|:-----------:|:--------------:|
+| ![首屏](docs/screenshots/hero.jpg) | ![章节](docs/screenshots/seasons.jpg) |
+
+---
+
 ## 技术栈
 
 - **React 19** + **TypeScript**
