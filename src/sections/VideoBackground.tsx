@@ -11,6 +11,19 @@ export default function VideoBackground() {
   const isTransitioning = useRef(false);
   const prevSrcRef = useRef(videoSrc);
 
+  const playWhenReady = useCallback((el: HTMLVideoElement) => {
+    const start = () => {
+      el.play().catch(() => {});
+    };
+
+    if (el.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+      start();
+      return;
+    }
+
+    el.addEventListener('canplay', start, { once: true });
+  }, []);
+
   const applyFilter = useCallback((el: HTMLVideoElement | null) => {
     if (!el) return;
     const filter = getTimeFilter(sliderValue);
@@ -70,7 +83,7 @@ export default function VideoBackground() {
     toVideo.src = videoSrc;
     toVideo.load();
     applyFilter(toVideo);
-    toVideo.play().catch(() => {});
+    playWhenReady(toVideo);
 
     setVideoVisible(true);
 
@@ -95,7 +108,7 @@ export default function VideoBackground() {
         setActiveVideo(activeVideo === 1 ? 2 : 1);
         setVideoVisible(true);
       });
-  }, [videoSrc, activeVideo, videoVisible, applyFilter, fadeToBlack]);
+  }, [videoSrc, activeVideo, videoVisible, applyFilter, fadeToBlack, playWhenReady]);
 
   useEffect(() => {
     switchVideo();
@@ -107,10 +120,10 @@ export default function VideoBackground() {
     v1.src = videoSrc;
     v1.load();
     applyFilter(v1);
-    v1.play().catch(() => {});
+    playWhenReady(v1);
     prevSrcRef.current = videoSrc;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [playWhenReady]);
 
   return (
     <div className="fixed inset-0 z-0 bg-black">

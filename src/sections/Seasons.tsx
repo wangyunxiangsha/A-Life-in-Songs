@@ -78,7 +78,10 @@ export default function Seasons() {
         >
           <div
             className={`season-panel glass-panel glass-panel-${chapter.id} relative max-w-2xl w-full p-8 lg:p-12 opacity-0`}
-            style={{ borderLeft: `3px solid ${chapter.color}` }}
+            style={{
+              borderLeft: `3px solid ${chapter.color}`,
+              ['--chapter-tint' as string]: chapter.glassBg,
+            }}
           >
             <h3
               className="font-card-display font-card-heading text-white mb-6"
@@ -132,7 +135,7 @@ export default function Seasons() {
                   >
                     {chapter.character.role}
                   </p>
-                  <p className="font-card-caption mt-2 text-white/65" style={{ fontSize: 'clamp(0.82rem, 1.2vw, 0.92rem)' }}>
+                  <p className="font-card-caption mt-2 text-white/85" style={{ fontSize: 'clamp(0.82rem, 1.2vw, 0.92rem)' }}>
                     {chapter.character.desc}
                   </p>
                 </div>
@@ -140,7 +143,7 @@ export default function Seasons() {
             )}
 
             <p
-              className="font-card-prose font-card-prose--story text-white/92"
+              className="font-card-prose font-card-prose--story text-white"
               style={{ fontSize: 'clamp(1rem, 1.55vw, 1.12rem)' }}
             >
               {chapter.story}

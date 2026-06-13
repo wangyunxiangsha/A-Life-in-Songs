@@ -113,6 +113,32 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => () => stopAmbient(), [stopAmbient]);
 
+  const markReady = useCallback(() => {
+    setStatus((prev) => (prev === 'ready' ? prev : 'ready'));
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const retryTimer = window.setTimeout(() => {
+      setStatus((prev) => {
+        if (prev !== 'loading') return prev;
+        audio.load();
+        return prev;
+      });
+    }, 8000);
+
+    const failTimer = window.setTimeout(() => {
+      setStatus((prev) => (prev === 'loading' ? 'error' : prev));
+    }, 30000);
+
+    return () => {
+      window.clearTimeout(retryTimer);
+      window.clearTimeout(failTimer);
+    };
+  }, []);
+
   const value: AmbientMusicState = {
     enabled,
     playing,
@@ -130,8 +156,9 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
         ref={audioRef}
         src={resolveAudioSrc(ambientMusic.src)}
         loop
-        preload="metadata"
-        onCanPlay={() => setStatus('ready')}
+        preload="auto"
+        onLoadedMetadata={markReady}
+        onCanPlay={markReady}
         onError={() => setStatus('error')}
       />
     </AmbientMusicContext.Provider>
