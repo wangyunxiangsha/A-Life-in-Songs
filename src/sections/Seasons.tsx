@@ -7,6 +7,15 @@ import AudioPlayer from './AudioPlayer';
 
 gsap.registerPlugin(ScrollTrigger);
 
+function parseChapterHeading(title: string): { era: string | null; song: string } {
+  const parts = title.split(' · ').filter(Boolean);
+  const displayParts = parts[0]?.includes('章') ? parts.slice(1) : parts;
+  if (displayParts.length >= 2) {
+    return { era: displayParts[0], song: displayParts.slice(1).join(' · ') };
+  }
+  return { era: null, song: displayParts.join(' · ') };
+}
+
 export default function Seasons() {
   const { setChapter, setVideoSrc } = useApp();
   const sectionRef = useRef<HTMLElement>(null);
@@ -59,7 +68,9 @@ export default function Seasons() {
         </h2>
       </div>
 
-      {chapters.map((chapter, i) => (
+      {chapters.map((chapter, i) => {
+        const heading = parseChapterHeading(chapter.title);
+        return (
         <div
           key={chapter.id}
           ref={(el) => { chapterRefs.current[i] = el; }}
@@ -70,10 +81,18 @@ export default function Seasons() {
             style={{ borderLeft: `3px solid ${chapter.color}` }}
           >
             <h3
-              className="font-display text-white mb-6"
-              style={{ fontSize: 'clamp(1.2rem, 2.2vw, 1.6rem)', fontWeight: 300, letterSpacing: '0.12em' }}
+              className="font-card-display font-card-heading text-white mb-6"
+              style={{ fontSize: 'clamp(1.2rem, 2.4vw, 1.8rem)' }}
             >
-              {chapter.title.split(' · ').slice(1).join(' · ')}
+              {heading.era ? (
+                <>
+                  <span className="font-card-era">{heading.era}</span>
+                  <span className="font-card-heading-sep" aria-hidden> · </span>
+                  <span className="font-card-song">{heading.song}</span>
+                </>
+              ) : (
+                <span className="font-card-song">{heading.song}</span>
+              )}
             </h3>
 
             {chapter.character && (
@@ -103,23 +122,17 @@ export default function Seasons() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <p
-                    className="font-display text-white"
-                    style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.1rem)', letterSpacing: '0.08em', fontWeight: 300 }}
-                  >
+                  <p className="font-card-name text-white" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.2rem)' }}>
                     {chapter.character.name}
                     <span className="ml-2" style={{ fontSize: '0.85em' }}>{chapter.character.emoji}</span>
                   </p>
                   <p
-                    className="font-mono mt-1.5"
-                    style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', color: chapter.color, letterSpacing: '0.1em' }}
+                    className="font-card-role mt-1.5"
+                    style={{ fontSize: 'clamp(0.68rem, 1.1vw, 0.78rem)', color: chapter.color }}
                   >
                     {chapter.character.role}
                   </p>
-                  <p
-                    className="font-body mt-2 text-white/55"
-                    style={{ fontSize: 'clamp(0.75rem, 1.1vw, 0.85rem)', lineHeight: 1.7, letterSpacing: '0.03em' }}
-                  >
+                  <p className="font-card-caption mt-2 text-white/65" style={{ fontSize: 'clamp(0.82rem, 1.2vw, 0.92rem)' }}>
                     {chapter.character.desc}
                   </p>
                 </div>
@@ -127,8 +140,8 @@ export default function Seasons() {
             )}
 
             <p
-              className="font-body text-white/85"
-              style={{ fontSize: 'clamp(0.9rem, 1.4vw, 1.05rem)', lineHeight: 2.1, letterSpacing: '0.04em' }}
+              className="font-card-prose font-card-prose--story text-white/92"
+              style={{ fontSize: 'clamp(1rem, 1.55vw, 1.12rem)' }}
             >
               {chapter.story}
             </p>
@@ -136,7 +149,8 @@ export default function Seasons() {
             <AudioPlayer src={chapter.audio} color={chapter.color} />
           </div>
         </div>
-      ))}
+        );
+      })}
     </section>
   );
 }

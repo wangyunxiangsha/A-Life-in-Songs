@@ -1,8 +1,10 @@
-# 开发文档 · 我的一生（Dreamways 定制）
+# 开发文档 · A Life in Songs
 
 ## 项目说明
 
-本项目在 [Dreamways](../README.md) 框架基础上，定制为个人人生回忆录沉浸式单页网站。内容以 **18 首歌对应 18 段人生经历** 为主线，通过滚动叙事、背景视频切换、章节 BGM 与角色卡片呈现。
+本项目在 [Dreamways](../README.md) 框架基础上，定制为个人人生回忆录沉浸式单页网站 **A Life in Songs**。内容以 **18 首歌对应 18 段人生经历** 为主线，通过滚动叙事、背景视频、氛围音乐、章节 BGM 与角色卡片呈现。
+
+**仓库**：[github.com/wangyunxiangsha/A-Life-in-Songs](https://github.com/wangyunxiangsha/A-Life-in-Songs)
 
 ## 技术栈
 
@@ -15,78 +17,104 @@
 | 滚动 | Lenis 平滑滚动 |
 | UI | shadcn/ui + Radix UI |
 
-## 目录结构（与本定制相关）
+## 目录结构（定制相关）
 
 ```
 Dreamways/
 ├── public/
-│   ├── videos/          # 背景视频（intro + 每章）
-│   ├── audio/           # BGM + 可选角色语音
-│   └── images/          # 个人照 + 每章角色图
+│   ├── videos/          # intro.mp4、ch01.mp4（其余章节暂无，黑底）
+│   ├── audio/           # 18 章 BGM + 氛围音乐 The Deep South
+│   └── images/          # ch01–ch18.png、character/、ref/
 ├── src/
 │   ├── content/
-│   │   └── config.ts    # ★ 核心配置（待写入定制内容）
-│   ├── sections/        # 页面区块（部分标题待改）
-│   ├── context/         # 章节、视频、滑块全局状态
-│   └── hooks/           # Lenis 等
-└── docs/                # 本项目文档
-    ├── plan.md          # 需求与计划
-    ├── readme.md        # 本文件
-    ├── standard.md      # 规范
-    ├── 我的一生-故事文案.md
-    ├── talk.md
-    ├── summary.md
-    ├── review.md
-    └── document.md
+│   │   └── config.ts    # ★ 核心配置（18 章 + 站点信息）
+│   ├── lib/
+│   │   └── audioManager.ts   # 全局音频互斥
+│   ├── context/
+│   │   ├── AppContext.tsx
+│   │   └── AmbientMusicContext.tsx  # 氛围 BGM
+│   ├── components/
+│   │   └── AmbientMusicToggle.tsx   # 导航栏音乐开关
+│   └── sections/        # Hero、Seasons、Companions 等
+└── docs/                # 项目管理文档
 ```
 
-## 页面模块
+## 页面模块（当前实现）
 
-| 模块 | 文件 | 定制说明 |
-|------|------|----------|
-| 首屏 Hero | `sections/Hero.tsx` | 读 `siteConfig` |
-| 关于我 About | `sections/About.tsx` | 读 `protagonist`，可 `show: false` 隐藏 |
-| 角色卡片 Companions | `sections/Companions.tsx` | 读 `chapters[].character`；标题读 `siteConfig.companionsSectionTitle` |
-| 章节故事 Seasons | `sections/Seasons.tsx` | 读 `chapters`；标题读 `siteConfig.seasonsSectionTitle` |
-| 时间滑块 TimeSlider | `sections/TimeSlider.tsx` | 画面色调滤镜；刻度读 `siteConfig.timeSliderTicks` |
-| 背景视频 | `sections/VideoBackground.tsx` | 随滚动切换 `chapters[].video` |
-| 导航 / 页脚 | `Navbar.tsx` / `Footer.tsx` | 读 `siteConfig` |
+| 模块 | 文件 | 说明 |
+|------|------|------|
+| 首屏 Hero | `Hero.tsx` | 读 `siteConfig` |
+| 关于我 About | `About.tsx` | `protagonist.show: false` 时隐藏 |
+| 角色卡片 Companions | `Companions.tsx` | 每页 6 张、共 3 页；翻转卡 + 角色图 |
+| 章节故事 Seasons | `Seasons.tsx` | 标题 + **小图肖像** + 正文 + 聆听故事 |
+| 时间滑块 TimeSlider | `TimeSlider.tsx` | 浅唱 / 留声 / 沉醉 画面滤镜 |
+| 背景视频 | `VideoBackground.tsx` | 有视频则播放，无则黑底 |
+| 导航 | `Navbar.tsx` | 标题 + **氛围音乐开关** |
+| 页脚 | `Footer.tsx` | 引用语、版权 |
+
+## 音频系统
+
+### 全局互斥（`audioManager.ts`）
+
+同一时间只播放一条音频。播放新歌时自动停止上一首。
+
+| 来源 | key 前缀 | 触发方式 |
+|------|----------|----------|
+| 章节 BGM | `chapter:` | 点击「聆听故事」 |
+| 角色语音 | `voice:` | 角色卡语音按钮（有 `audio` 时） |
+| 氛围音乐 | `ambient` | 导航栏开关，默认开启 |
+
+### 氛围背景音乐
+
+- 配置：`siteConfig.ambientMusic`
+- 当前曲目：`/audio/Adam Young - The Deep South.mp3`
+- 播放章节歌时自动暂停；章节结束或暂停后恢复
+- 偏好保存在 `localStorage`（`ambient-music-enabled`）
+
+### 路径编码
+
+中文/空格文件名在播放器中使用 `encodeURI`，避免加载失败。
+
+## 背景视频策略
+
+```ts
+// config.ts
+chapterVideoIds: ['childhood-61']  // 仅第 1 章有专属视频
+resolveChapterVideo(id, video)      // 无视频 → 空字符串 → 黑底
+```
+
+第 2–18 章不加载 `intro.mp4` 占位，滚动时为纯黑背景。
 
 ## 配置字段说明
 
 ### siteConfig
 
-网站标题、副标题、首屏文案、页脚、首屏视频路径。
-
-### protagonist
-
-关于我区块：照片、介绍、可选语音；`show` 控制显隐。
+| 字段 | 当前值 |
+|------|--------|
+| title | A Life in Songs |
+| titleSub | 一首歌一种心情 |
+| seasonsSectionTitle | 一路歌行 |
+| companionsSectionTitle | 故事里的人们 |
+| ambientMusic | src / volume / labelOn / labelOff |
+| chapterVideoIds | 有专属视频的章节 id 列表 |
 
 ### chapters[]（18 项）
 
-每章包含：
+每章：`id`、`title`、`story`、`audio`、`color`、`glassBg`、`character`（含 `image` 等）。  
+第 1 章另有 `video: '/videos/ch01.mp4'`。
 
-| 字段 | 用途 |
+## 资源现状
+
+| 资源 | 状态 |
 |------|------|
-| `id` | 唯一标识，英文+连字符 |
-| `video` | 章节背景视频 |
-| `title` | 章节标题 |
-| `story` | 故事正文（见故事文案文档） |
-| `audio` | 章节 BGM |
-| `color` / `glassBg` | 主题色与玻璃面板色 |
-| `character` | 角色卡片：name, role, emoji, image, visualGradient, desc, detail, intro, audio |
-
-## 资源命名建议
-
-为便于维护，建议统一编号：
-
-```
-public/videos/intro.mp4
-public/videos/ch01.mp4 … ch18.mp4
-public/audio/ch01.mp3 … ch18.mp3
-public/images/me.jpg
-public/images/ch01.jpg … ch18.jpg
-```
+| 18 章 BGM | ✅ `public/audio/` |
+| 18 章插画 | ✅ `ch01.png` … `ch18.png` |
+| 氛围 BGM | ✅ The Deep South |
+| intro.mp4 | ✅ |
+| ch01.mp4 | ✅ |
+| ch02–ch18.mp4 | ❌ 未提供（黑底） |
+| 角色语音 | ❌ 未配置 |
+| About 照片 | ❌ 区块未开 |
 
 ## 本地开发
 
@@ -95,22 +123,27 @@ npm install
 npm run dev
 ```
 
-浏览器访问 Vite 配置端口（默认 `http://localhost:3000`）。
+Windows 可双击 `启动-Windows.bat`（窗口标题：A Life in Songs · 启动中...）。
 
-Windows 也可双击 `启动-Windows.bat`。
+构建：
+
+```bash
+npm run build
+```
 
 ## 定制工作流
 
-1. 在 `docs/我的一生-故事文案.md` 确认故事终稿
-2. 补充角色卡片、siteConfig、protagonist（见 `plan.md` 待办）
-3. 资源放入 `public/` 对应目录
-4. 写入 `src/content/config.ts`
-5. 按需修改 `sections/` 硬编码标题
-6. 预览联调 → 更新 `summary.md` / `talk.md`
+1. 改故事/角色 → `docs/我的一生-故事文案.md`、`角色卡片.md`
+2. 同步 → `src/content/config.ts`
+3. 媒体 → `public/` 对应目录
+4. 新章节视频就绪 → 更新 `chapterVideoIds` 与 `video` 字段
+5. 更新 `plan.md`、`document.md`、`talk.md`
 
 ## 相关文档
 
 - 故事正文：`我的一生-故事文案.md`
+- 角色卡：`角色卡片.md`
 - 需求计划：`plan.md`
-- 编写规范：`standard.md`
+- 规范：`standard.md`
+- 阶段总结：`summary.md`
 - 文档索引：`document.md`

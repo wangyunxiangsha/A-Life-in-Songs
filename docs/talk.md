@@ -114,3 +114,69 @@
 - ScrollTrigger 在 Seasons 滚动时切换 `videoSrc` 与 `currentChapter`
 - 无 `audio` 时填空字符串，播放按钮自动禁用
 - Vite `server.port` 为 3000；根 README 写 4000 为启动脚本行为，以实际为准
+
+---
+
+## 2026-06-12 · 会话五：config 写入与 GitHub
+
+### 完成
+
+- 18 章故事、角色卡、音频路径写入 `src/content/config.ts`
+- 18 首 BGM、18 张 ch01–ch18.png、角色参考图入库
+- 站点信息：我的一生 → **A Life in Songs**
+- 区块标题：一路歌行 / 故事里的人们 / 浅唱·留声·沉醉
+- 提交 `e3b2271`，推送目标 `wangyunxiangsha/A-Life-in-Songs`
+
+### 音频互斥（首轮）
+
+- 新增 `src/lib/audioManager.ts`
+- AudioPlayer、Companions VoiceButton 接入 playExclusive
+
+---
+
+## 2026-06-12 · 会话六：性能与 UI 调整
+
+### Chrome 卡死排查
+
+- 曾加入全站氛围音乐自动加载、滚动自动试听 30 秒、大量 ScrollTrigger 延后逻辑
+- 用户反馈卡死后 **git 回溯** 至轻量版本，仅保留 18 章 config
+- 删除/未恢复：AmbientMusic（临时）、loadingConfig、useDeferredMount 等重逻辑
+
+### 背景视频策略
+
+- 用户明确：第 2–18 章 **不要 intro 占位**，要 **纯黑底**
+- `chapterVideoIds: ['childhood-61']`，`resolveChapterVideo()` 无视频返回空字符串
+- VideoBackground 空 src 时淡出视频、显示黑底
+
+### 角色卡
+
+- 恢复 **每页 6 张、共 3 页** 分页（Chevron + 圆点）
+
+### 章节故事区图片
+
+- 用户不要全宽大图；恢复历史 **小图肖像**（72–96px）+ 角色名/身份/简介
+- 增加章节间垂直间距，避免上下章贴连
+
+---
+
+## 2026-06-12 · 会话七：音频与氛围音乐恢复
+
+### 恢复内容
+
+- `audioManager.ts` — 章节歌 / 角色语音 / 氛围 BGM 全局互斥
+- `AmbientMusicContext.tsx` + `AmbientMusicToggle.tsx` — The Deep South
+- 导航栏音乐开关；播章节歌时氛围暂停，结束后恢复
+- AudioPlayer `encodeURI` 修复中文路径
+
+### 提交
+
+- `da04c17` Restore exclusive audio playback, ambient music, and chapter portrait UI
+- 用户本机 `git push` 成功
+
+---
+
+## 2026-06-12 · 会话八：文档同步
+
+- 更新 plan / readme / summary / document / review / talk
+- 反映当前：可预览、已推 GitHub、待补背景视频与 About
+

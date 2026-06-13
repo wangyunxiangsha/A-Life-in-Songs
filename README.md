@@ -95,6 +95,16 @@ Dreamways/
 
 ---
 
+## 定制实例 · A Life in Songs
+
+本仓库当前定制为个人人生回忆录网站 **A Life in Songs**（18 首歌 × 18 段经历）。
+
+- 定制开发说明：[docs/readme.md](./docs/readme.md)
+- 需求与进度：[docs/plan.md](./docs/plan.md)
+- 在线仓库：[github.com/wangyunxiangsha/A-Life-in-Songs](https://github.com/wangyunxiangsha/A-Life-in-Songs)
+
+---
+
 ## License
 
 MIT

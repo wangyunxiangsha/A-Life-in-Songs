@@ -1,4 +1,4 @@
-# 项目规范 · 我的一生
+# 项目规范 · A Life in Songs
 
 ## 1. 文档规范
 
@@ -38,6 +38,13 @@
 - `footerQuote`：一句人生感悟，可加书名号式引号
 
 ## 3. 资源规范
+
+### 音频
+
+- 章节 BGM、角色语音、氛围音乐通过 `audioManager` **全局互斥**，新增播放器须接入 `playExclusive` / `stopExclusive`
+- 中文或含空格路径使用 `encodeURI` 后再赋给 `<audio src>`
+- 无音频时 `audio: ''`，UI 自动禁用
+- 氛围音乐配置在 `siteConfig.ambientMusic`，勿与章节歌硬编码冲突
 
 ### 视频
 

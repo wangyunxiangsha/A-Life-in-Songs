@@ -64,6 +64,66 @@
     font-weight: 400;
   }
 
+  /* 章节故事卡片：新致宋标题/人名 + 文楷正文 */
+  .font-card-display {
+    font-family: 'LXGW Neo ZhiSong', '霞鹜新致宋', 'Noto Serif SC', 'Noto Serif JP', 'Songti SC', serif;
+    font-feature-settings: 'palt' 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  .font-card-heading {
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .font-card-era,
+  .font-card-song {
+    font-family: inherit;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: #fff;
+  }
+
+  .font-card-heading-sep {
+    font-weight: 400;
+    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0 0.15em;
+  }
+
+  .font-card-name {
+    font-family: 'LXGW Neo ZhiSong', '霞鹜新致宋', 'Noto Serif SC', 'Noto Serif JP', serif;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    font-feature-settings: 'palt' 1;
+  }
+
+  .font-card-prose {
+    font-family: 'LXGW WenKai', '霞鹜文楷', 'KaiTi', cursive;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 2.3;
+    text-rendering: optimizeLegibility;
+  }
+
+  .font-card-prose--story {
+    text-indent: 2em;
+  }
+
+  .font-card-caption {
+    font-family: 'LXGW WenKai', '霞鹜文楷', cursive;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.85;
+  }
+
+  .font-card-role {
+    font-family: 'LXGW WenKai', '霞鹜文楷', cursive;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    opacity: 0.95;
+  }
+
   .glass-panel {
     backdrop-filter: blur(20px) saturate(1.2);
     -webkit-backdrop-filter: blur(20px) saturate(1.2);

@@ -1,20 +1,24 @@
 # 文档索引与更新记录
 
-本项目定制相关文档均位于 `docs/` 目录。每次内容或配置更新时维护本文件。
+本项目定制相关文档均位于 `docs/` 目录。
 
 ## 文档清单
 
 | 文档 | 用途 | 状态 |
 |------|------|------|
-| [plan.md](./plan.md) | 需求对齐、实施计划、变更记录、待办 | 持续更新 |
-| [readme.md](./readme.md) | 开发说明、目录结构、配置字段、工作流 | 持续更新 |
-| [standard.md](./standard.md) | 内容、资源、代码、测试规范 | 稳定，随实践补充 |
-| [我的一生-故事文案.md](./我的一生-故事文案.md) | 18 章故事正文与章节速查表 | 已定稿，随用户修订更新 |
-| [角色卡片.md](./角色卡片.md) | 18 章角色卡（小梦/阿驰/瑶瑶/小晴/小洁/娣总 + 东方波） | 已定稿，待用户确认 |
-| [talk.md](./talk.md) | 对话与技术细节记录 | 持续更新 |
-| [summary.md](./summary.md) | 项目阶段总结 | 阶段结束更新 |
-| [review.md](./review.md) | 代码与文档审查 | 每轮实施後更新 |
-| [document.md](./document.md) | 本索引 | 每次文档变更更新 |
+| [plan.md](./plan.md) | 需求、计划、变更记录、待办 | ✅ 2026-06-12 更新 |
+| [readme.md](./readme.md) | 开发说明、模块、音频与视频策略 | ✅ 2026-06-12 更新 |
+| [standard.md](./standard.md) | 内容、资源、代码规范 | 稳定 |
+| [我的一生-故事文案.md](./我的一生-故事文案.md) | 18 章故事正文 | 已定稿 |
+| [角色卡片.md](./角色卡片.md) | 18 章角色卡人物与文案 | 已定稿，已写入 config |
+| [AI人物设定-插画绘本.md](./AI人物设定-插画绘本.md) | AI 画风与角色基准 | 参考用 |
+| [AI分镜提示词-插画绘本.md](./AI分镜提示词-插画绘本.md) | 18 章分镜提示词 | 参考用 |
+| [可灵AI制作指南-插画绘本.md](./可灵AI制作指南-插画绘本.md) | 可灵实操 | 参考用 |
+| [真人参考照片对照表.md](./真人参考照片对照表.md) | 参考照说明 | 参考用 |
+| [talk.md](./talk.md) | 对话与技术记录 | ✅ 2026-06-12 更新 |
+| [summary.md](./summary.md) | 项目阶段总结 | ✅ 2026-06-12 更新 |
+| [review.md](./review.md) | 代码审查 | ✅ 2026-06-12 更新 |
+| [document.md](./document.md) | 本索引 | 本文件 |
 
 ## 根目录其他文档
 
@@ -27,32 +31,38 @@
 
 | 日期 | 更新内容 | 涉及文件 |
 |------|----------|----------|
-| 2026-06-10 | 初版 16 章故事文案 | 我的一生-故事文案.md |
-| 2026-06-10 | 第 1–2 章修订；新增之子于归、飘摇；匆匆那年调整；大学顺序调整；扩至 18 章 | 我的一生-故事文案.md |
-| 2026-06-10 | 建立 docs 项目管理文档体系 | plan, readme, standard, talk, summary, review, document |
-| 2026-06-10 | 写入 `src/content/config.ts`（18 章 + 站点信息 + 角色卡） | config.ts |
-| 2026-06-10 | AI 素材制作指南（插画绘本画风） | AI人物设定-插画绘本.md, AI分镜提示词-插画绘本.md |
-| 2026-06-10 | 可灵 AI 实操流程（参数、图生视频运动词） | 可灵AI制作指南-插画绘本.md |
-| 2026-06-12 | 用户提供的真人参考照整理至 `public/images/ref/` | 真人参考照片对照表.md, 真人参考-可灵提示词增补.md |
+| 2026-06-10 | 初版故事文案与 docs 体系 | 多份 |
+| 2026-06-10 | 写入 config.ts；AI 素材指南 | config.ts, AI*.md |
+| 2026-06-12 | 真人参考照整理 | ref/, 对照表 |
+| 2026-06-12 | 项目重命名 A Life in Songs；18 章媒体入库 | config, public/ |
+| 2026-06-12 | 性能回溯、黑底策略、角色卡分页、小图肖像 | Seasons, Companions, VideoBackground |
+| 2026-06-12 | 音频互斥 + 氛围 BGM 恢复 | audioManager, AmbientMusic*, AudioPlayer |
+| 2026-06-12 | 推送 GitHub；全面更新项目管理文档 | plan, readme, summary, talk, review, document |
 
-## 下一步文档计划
-
-| 触发条件 | 将更新 |
-|----------|--------|
-| 角色卡片文案完成 | plan.md、我的一生-故事文案.md 或新建 角色卡片.md |
-| config.ts 写入 | readme.md、talk.md、review.md、summary.md |
-| 资源目录就位 | plan.md 勾选、standard.md 必要时补充 |
-| 用户确认发布 | summary.md、talk.md；GitHub 同步记录写入 talk.md |
-
-## 快速导航：当前进度
+## 当前进度一览
 
 ```
 [✅] 故事文案 18 章
-[✅] 项目管理文档
-[✅] 角色卡片文案（东方波）
-[⏳] siteConfig / protagonist
-[⏳] public 媒体资源
-[⏳] config.ts 注入
-[⏳] 组件标题定制
-[⏳] 预览验收
+[✅] 角色卡片文案 + config 写入
+[✅] siteConfig / 区块标题 / 主题色
+[✅] 18 章 BGM + 章节插画
+[✅] 氛围 BGM + 音频互斥
+[✅] 角色卡分页 + 章节小图肖像
+[✅] 第 1 章背景视频 + intro
+[✅] GitHub 同步
+[⏳] 第 2–18 章背景视频（可选）
+[⏳] About 区块
+[⏳] 角色语音
+[⏳] 公开部署
 ```
+
+## 代码与文档对应关系
+
+| 功能 | 代码位置 | 文档说明 |
+|------|----------|----------|
+| 站点与章节内容 | `src/content/config.ts` | readme.md §配置字段 |
+| 音频互斥 | `src/lib/audioManager.ts` | readme.md §音频系统 |
+| 氛围音乐 | `context/AmbientMusicContext.tsx` | plan.md §站点基本信息 |
+| 章节故事 UI | `sections/Seasons.tsx` | talk.md 会话六 |
+| 角色卡分页 | `sections/Companions.tsx` | talk.md 会话五 |
+| 背景视频 | `sections/VideoBackground.tsx` + `resolveChapterVideo` | readme.md §背景视频策略 |
