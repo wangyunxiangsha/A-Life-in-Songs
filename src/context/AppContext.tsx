@@ -28,7 +28,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setVideoSrc = useCallback((src: string) => {
-    setVideoSrcState(src);
+    setVideoSrcState((prev) => (prev === src ? prev : src));
   }, []);
 
   return (

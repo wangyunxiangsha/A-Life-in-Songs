@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title 梦途 · 启动中...
+title A Life in Songs · 启动中...
 
 cd /d "%~dp0"
 

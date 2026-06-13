@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
-import { chapters, siteConfig } from '@/content/config';
+import { chapters, siteConfig, resolveChapterVideo } from '@/content/config';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import AudioPlayer from './AudioPlayer';
@@ -28,8 +28,8 @@ export default function Seasons() {
           trigger: el,
           start: 'top center',
           end: 'bottom center',
-          onEnter:     () => { setChapter(chapter.id); setVideoSrc(chapter.video); },
-          onEnterBack: () => { setChapter(chapter.id); setVideoSrc(chapter.video); },
+          onEnter:     () => { setChapter(chapter.id); setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '')); },
+          onEnterBack: () => { setChapter(chapter.id); setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '')); },
         });
 
         const panel = el.querySelector('.season-panel');
@@ -55,7 +55,7 @@ export default function Seasons() {
           className="font-display text-white"
           style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 300, letterSpacing: '0.1em' }}
         >
-          四季之梦
+          {siteConfig.seasonsSectionTitle}
         </h2>
       </div>
 

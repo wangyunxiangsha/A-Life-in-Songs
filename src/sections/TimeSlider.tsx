@@ -1,5 +1,6 @@
 import { useRef, useCallback, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
+import { siteConfig } from '@/content/config';
 
 export default function TimeSlider() {
   const { sliderValue, setSliderValue } = useApp();
@@ -42,11 +43,7 @@ export default function TimeSlider() {
 
   const pct = sliderValue * 100;
 
-  const ticks = [
-    { pos: 0, label: '浅眠' },
-    { pos: 0.5, label: '入梦' },
-    { pos: 1, label: '深梦' },
-  ];
+  const ticks = siteConfig.timeSliderTicks;
 
   return (
     <div
