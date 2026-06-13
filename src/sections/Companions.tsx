@@ -116,6 +116,7 @@ function CompanionCard({
   const char = chapter.character;
   const cardH = CARD_PAD + CARD_IMG_H + BOTTOM_H;
   const rotate = index % 2 === 0 ? -2 : 2;
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <div
@@ -173,17 +174,24 @@ function CompanionCard({
               style={{ background: `radial-gradient(circle at 60% 35%, ${chapter.color}22 0%, transparent 65%)` }}
             />
             <span
-              className="relative select-none"
-              style={{ fontSize: `${CARD_SIZE * 0.28}px`, filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.12))', zIndex: 0 }}
+              className="relative select-none transition-opacity duration-300"
+              style={{
+                fontSize: `${CARD_SIZE * 0.28}px`,
+                filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.12))',
+                zIndex: 0,
+                opacity: imageLoaded ? 0 : 1,
+              }}
             >
               {char.emoji}
             </span>
             <img
               src={char.image}
               alt={char.name}
-              className="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
-              style={{ zIndex: 1 }}
+              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+              loading="eager"
+              decoding="async"
+              style={{ zIndex: 1, opacity: imageLoaded ? 1 : 0 }}
+              onLoad={() => setImageLoaded(true)}
               onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             />
             <div

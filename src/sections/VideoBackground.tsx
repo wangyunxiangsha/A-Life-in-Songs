@@ -142,7 +142,7 @@ export default function VideoBackground() {
         playsInline
         muted
         loop
-        preload="auto"
+        preload="none"
         style={{ opacity: videoVisible && activeVideo === 2 ? 1 : 0 }}
       />
     </div>

@@ -119,6 +119,7 @@ export default function Seasons() {
                     alt={chapter.character.name}
                     className="absolute inset-0 w-full h-full object-cover"
                     loading="lazy"
+                    decoding="async"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).style.display = 'none';
                     }}
