@@ -77,11 +77,11 @@ export default function Seasons() {
           className="relative min-h-[100dvh] flex items-center justify-center px-[5vw] py-[clamp(4rem,12vh,8rem)] mb-[clamp(2rem,8vh,5rem)]"
         >
           <div
-            className={`season-panel glass-panel glass-panel-${chapter.id} relative max-w-2xl w-full p-8 lg:p-12 opacity-0`}
-            style={{ borderLeft: `3px solid ${chapter.color}` }}
+            className={`season-panel season-reading-panel glass-panel glass-panel-${chapter.id} relative max-w-2xl w-full p-8 lg:p-12 opacity-0`}
+            style={{ borderLeft: `4px solid ${chapter.color}` }}
           >
             <h3
-              className="font-card-display font-card-heading text-white mb-6"
+              className="font-card-display font-card-heading season-heading mb-6"
               style={{ fontSize: 'clamp(1.2rem, 2.4vw, 1.8rem)' }}
             >
               {heading.era ? (
@@ -97,8 +97,8 @@ export default function Seasons() {
 
             {chapter.character && (
               <div
-                className="flex items-center gap-4 mb-6 pb-6"
-                style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+                className="season-character-card flex items-center gap-4 mb-7 p-4"
+                style={{ borderColor: `${chapter.color}44` }}
               >
                 <div
                   className="relative flex-shrink-0 overflow-hidden"
@@ -106,8 +106,8 @@ export default function Seasons() {
                     width: 'clamp(72px, 12vw, 96px)',
                     height: 'clamp(90px, 15vw, 120px)',
                     borderRadius: '3px',
-                    border: `1.5px solid ${chapter.color}66`,
-                    boxShadow: `0 4px 20px ${chapter.color}22`,
+                    border: `1.5px solid ${chapter.color}aa`,
+                    boxShadow: `0 10px 30px rgba(0,0,0,0.28), 0 0 24px ${chapter.color}2f`,
                     background: chapter.character.visualGradient,
                   }}
                 >
@@ -122,7 +122,7 @@ export default function Seasons() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-card-name text-white" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.2rem)' }}>
+                  <p className="font-card-name season-character-name" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.2rem)' }}>
                     {chapter.character.name}
                     <span className="ml-2" style={{ fontSize: '0.85em' }}>{chapter.character.emoji}</span>
                   </p>
@@ -132,7 +132,7 @@ export default function Seasons() {
                   >
                     {chapter.character.role}
                   </p>
-                  <p className="font-card-caption mt-2 text-white/65" style={{ fontSize: 'clamp(0.82rem, 1.2vw, 0.92rem)' }}>
+                  <p className="font-card-caption season-character-caption mt-2" style={{ fontSize: 'clamp(0.82rem, 1.2vw, 0.92rem)' }}>
                     {chapter.character.desc}
                   </p>
                 </div>
@@ -140,7 +140,7 @@ export default function Seasons() {
             )}
 
             <p
-              className="font-card-prose font-card-prose--story text-white/92"
+              className="font-card-prose font-card-prose--story season-story-text"
               style={{ fontSize: 'clamp(1rem, 1.55vw, 1.12rem)' }}
             >
               {chapter.story}

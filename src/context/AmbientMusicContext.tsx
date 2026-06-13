@@ -58,9 +58,13 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
     stopExclusive(AMBIENT_KEY);
   }, []);
 
-  const startAmbient = useCallback(() => {
+  const startAmbient = useCallback((forceLoad = false) => {
     const a = audioRef.current;
-    if (!a || status !== 'ready') return;
+    if (!a || status === 'error') return;
+
+    if (forceLoad && a.readyState < HTMLMediaElement.HAVE_METADATA) {
+      a.load();
+    }
 
     playExclusive(AMBIENT_KEY, stopAmbient);
     a.play()
@@ -80,7 +84,7 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
     } catch {
       /* ignore */
     }
-    if (next) startAmbient();
+    if (next) startAmbient(true);
     else stopAmbient();
   }, [enabled, startAmbient, stopAmbient]);
 
@@ -93,23 +97,9 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
       if (key && key !== AMBIENT_KEY) {
         a.pause();
         setPlaying(false);
-      } else if (!key && wantsEnabledRef.current && status === 'ready') {
-        startAmbient();
       }
     });
-  }, [enabled, status, startAmbient]);
-
-  useEffect(() => {
-    if (!enabled || status !== 'ready') return;
-
-    const tryStart = () => startAmbient();
-    window.addEventListener('pointerdown', tryStart, { once: true, passive: true });
-    tryStart();
-
-    return () => {
-      window.removeEventListener('pointerdown', tryStart);
-    };
-  }, [enabled, status, startAmbient]);
+  }, [enabled]);
 
   useEffect(() => () => stopAmbient(), [stopAmbient]);
 
@@ -117,7 +107,7 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
     enabled,
     playing,
     status,
-    available: status === 'ready',
+    available: status !== 'error',
     toggle,
     labelOn: ambientMusic.labelOn,
     labelOff: ambientMusic.labelOff,
@@ -130,7 +120,8 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
         ref={audioRef}
         src={resolveAudioSrc(ambientMusic.src)}
         loop
-        preload="metadata"
+        preload="none"
+        onLoadedMetadata={() => setStatus('ready')}
         onCanPlay={() => setStatus('ready')}
         onError={() => setStatus('error')}
       />

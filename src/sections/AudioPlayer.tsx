@@ -34,7 +34,11 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
 
   const toggle = () => {
     const audio = audioRef.current;
-    if (!audio || !canPlay) return;
+    if (!audio || !src) return;
+    if (!canPlay) {
+      audio.load();
+      return;
+    }
     if (playing) {
       handleStop();
     } else {
@@ -62,9 +66,11 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
     audio.currentTime = ((e.clientX - rect.left) / rect.width) * duration;
   };
 
-  const statusText = !canPlay
+  const statusText = !src
     ? '录音即将上线 · Coming Soon'
-    : label ?? (playing ? '暂停' : '聆听故事');
+    : !canPlay
+      ? '点击播放加载'
+      : label ?? (playing ? '暂停' : '聆听故事');
 
   // ── Large / prominent variant ──────────────────────────────────────────
   if (large) {
@@ -73,6 +79,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
         <audio
           ref={audioRef}
           src={audioSrc}
+          preload="none"
           onCanPlay={() => setCanPlay(true)}
           onTimeUpdate={() => {
             const a = audioRef.current;
@@ -88,7 +95,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
         <div className="flex flex-col items-center gap-3">
           <button
             onClick={toggle}
-            disabled={!canPlay}
+            disabled={!src}
             className="relative flex items-center justify-center rounded-full transition-all duration-300"
             style={{
               width: '64px',
@@ -152,12 +159,13 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
   // ── Compact / default variant ──────────────────────────────────────────
   return (
     <div
-      className="flex items-center gap-3 mt-6 p-4 rounded-xl"
-      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
+      className="season-audio-player flex items-center gap-3 mt-7 p-4 rounded-xl"
+      style={{ background: 'rgba(0,0,0,0.26)', border: '1px solid rgba(255,255,255,0.22)' }}
     >
       <audio
         ref={audioRef}
         src={audioSrc}
+        preload="none"
         onCanPlay={() => setCanPlay(true)}
         onTimeUpdate={() => {
           const a = audioRef.current;
@@ -171,7 +179,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
 
       <button
         onClick={toggle}
-        disabled={!canPlay}
+        disabled={!src}
         className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
         style={{
           background: canPlay ? `${color}30` : 'rgba(255,255,255,0.06)',
@@ -189,11 +197,11 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-2">
           <Volume2 size={12} style={{ color: canPlay ? color : 'rgba(255,255,255,0.25)', flexShrink: 0 }} />
-          <span className="font-mono" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em' }}>
+          <span className="font-mono" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.76)', letterSpacing: '0.06em' }}>
             {statusText}
           </span>
           {canPlay && duration > 0 && (
-            <span className="font-mono ml-auto flex-shrink-0" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>
+            <span className="font-mono ml-auto flex-shrink-0" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.62)' }}>
               {formatTime(progress * duration)} / {formatTime(duration)}
             </span>
           )}
@@ -201,7 +209,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
 
         <div
           className="relative h-[2px] rounded-full overflow-hidden cursor-pointer"
-          style={{ background: 'rgba(255,255,255,0.1)' }}
+          style={{ background: 'rgba(255,255,255,0.24)' }}
           onClick={handleTrackClick}
         >
           <div

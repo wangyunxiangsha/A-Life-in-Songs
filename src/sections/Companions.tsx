@@ -16,6 +16,11 @@ const CARD_IMG_H = Math.round(CARD_SIZE * 1.15);
 
 const totalPages = Math.ceil(chapters.length / CARDS_PER_PAGE);
 
+function cardThumb(fullPng: string): string {
+  const match = fullPng.match(/\/images\/ch(\d{2})\.png$/);
+  return match ? `/images/thumbs/ch${match[1]}.webp` : fullPng;
+}
+
 function VoiceButton({ src, color }: { src: string; color: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -179,12 +184,20 @@ function CompanionCard({
               {char.emoji}
             </span>
             <img
-              src={char.image}
+              src={cardThumb(char.image)}
               alt={char.name}
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
+              decoding="async"
               style={{ zIndex: 1 }}
-              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              onError={e => {
+                const img = e.currentTarget as HTMLImageElement;
+                if (!img.src.endsWith('.png')) {
+                  img.src = char.image;
+                  return;
+                }
+                img.style.display = 'none';
+              }}
             />
             <div
               className="absolute inset-0 flex items-center justify-center transition-opacity duration-200"
