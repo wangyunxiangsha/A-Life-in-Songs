@@ -1,8 +1,9 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { chapters, siteConfig } from '@/content/config';
 import { Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { getActiveKey, playExclusive, stopExclusive, stopCurrentAudio, subscribe } from '@/lib/audioManager';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,22 +16,27 @@ const CARD_IMG_H = Math.round(CARD_SIZE * 1.15);
 
 const totalPages = Math.ceil(chapters.length / CARDS_PER_PAGE);
 
-type ActiveAudio = { audio: HTMLAudioElement; stop: () => void };
-
-function VoiceButton({
-  src,
-  color,
-  activeRef,
-}: {
-  src: string;
-  color: string;
-  activeRef: React.MutableRefObject<ActiveAudio | null>;
-}) {
+function VoiceButton({ src, color }: { src: string; color: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [canPlay, setCanPlay] = useState(false);
+  const audioSrc = useMemo(() => (src ? encodeURI(src) : ''), [src]);
+  const audioKey = useMemo(() => `voice:${src}`, [src]);
 
-  if (!src) return null;
+  const handleStop = useCallback(() => {
+    audioRef.current?.pause();
+    setPlaying(false);
+    stopExclusive(audioKey);
+  }, [audioKey]);
+
+  useEffect(() => {
+    return subscribe(() => {
+      if (getActiveKey() !== audioKey) {
+        audioRef.current?.pause();
+        setPlaying(false);
+      }
+    });
+  }, [audioKey]);
 
   const toggle = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -38,28 +44,28 @@ function VoiceButton({
     if (!a || !canPlay) return;
 
     if (playing) {
-      a.pause();
-      setPlaying(false);
-      activeRef.current = null;
+      handleStop();
     } else {
-      if (activeRef.current && activeRef.current.audio !== a) {
-        activeRef.current.stop();
-      }
+      playExclusive(audioKey, handleStop);
       a.currentTime = 0;
-      a.play().then(() => {
-        setPlaying(true);
-        activeRef.current = { audio: a, stop: () => { a.pause(); setPlaying(false); } };
-      }).catch(() => {});
+      a.play()
+        .then(() => setPlaying(true))
+        .catch(() => {
+          stopExclusive(audioKey);
+          setPlaying(false);
+        });
     }
   };
+
+  if (!src) return null;
 
   return (
     <div className="flex flex-col items-center gap-1" onClick={e => e.stopPropagation()}>
       <audio
         ref={audioRef}
-        src={src}
+        src={audioSrc}
         onCanPlay={() => setCanPlay(true)}
-        onEnded={() => { setPlaying(false); activeRef.current = null; }}
+        onEnded={handleStop}
       />
       <button
         onClick={toggle}
@@ -99,7 +105,6 @@ function CompanionCard({
   hovered,
   onToggleFlip,
   onHover,
-  activeAudioRef,
 }: {
   chapter: Chapter;
   index: number;
@@ -107,7 +112,6 @@ function CompanionCard({
   hovered: boolean;
   onToggleFlip: () => void;
   onHover: (v: boolean) => void;
-  activeAudioRef: React.MutableRefObject<ActiveAudio | null>;
 }) {
   const char = chapter.character;
   const cardH = CARD_PAD + CARD_IMG_H + BOTTOM_H;
@@ -210,7 +214,7 @@ function CompanionCard({
                 {char.role}
               </p>
             </div>
-            <VoiceButton src={char.audio} color={chapter.color} activeRef={activeAudioRef} />
+            <VoiceButton src={char.audio} color={chapter.color} />
           </div>
         </div>
 
@@ -270,7 +274,6 @@ export default function Companions() {
   const [flipped, setFlipped] = useState<boolean[]>(() => chapters.map(() => false));
   const [hovered, setHovered] = useState<number | null>(null);
   const [entered, setEntered] = useState(false);
-  const activeAudioRef = useRef<ActiveAudio | null>(null);
 
   const pageStart = page * CARDS_PER_PAGE;
   const pageChapters = chapters.slice(pageStart, pageStart + CARDS_PER_PAGE);
@@ -279,10 +282,7 @@ export default function Companions() {
     const clamped = Math.max(0, Math.min(totalPages - 1, next));
     setPage(clamped);
     setHovered(null);
-    if (activeAudioRef.current) {
-      activeAudioRef.current.stop();
-      activeAudioRef.current = null;
-    }
+    stopCurrentAudio();
   }, []);
 
   const toggleFlip = (globalIndex: number) =>
@@ -407,7 +407,6 @@ export default function Companions() {
                 hovered={hovered === globalIndex}
                 onToggleFlip={() => toggleFlip(globalIndex)}
                 onHover={v => setHovered(v ? globalIndex : null)}
-                activeAudioRef={activeAudioRef}
               />
             );
           })}

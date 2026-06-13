@@ -4,7 +4,7 @@
 //  资源文件：
 //    音频 → public/audio/（已就位）
 //    视频 → public/videos/（占位，待补充 intro.mp4、ch01–ch18.mp4）
-//    图片 → public/images/（占位，待补充 ch01–ch18.png）
+//    图片 → public/images/ch01–ch18.png（章节插画）
 // ============================================================
 
 export const siteConfig = {
@@ -22,6 +22,13 @@ export const siteConfig = {
     { pos: 0.5, label: '留声' },
     { pos: 1, label: '沉醉' },
   ] as const,
+  /** 全站氛围背景音乐 */
+  ambientMusic: {
+    src: '/audio/Adam Young - The Deep South.mp3',
+    volume: 0.28,
+    labelOn: '氛围音乐',
+    labelOff: '开启音乐',
+  },
   /** 仅这些章节会切换专属背景视频；其余章节黑底，不加载 intro */
   chapterVideoIds: ['childhood-61'] as const,
 };

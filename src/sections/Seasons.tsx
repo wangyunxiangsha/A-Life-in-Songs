@@ -63,7 +63,7 @@ export default function Seasons() {
         <div
           key={chapter.id}
           ref={(el) => { chapterRefs.current[i] = el; }}
-          className="relative min-h-[100dvh] flex items-center justify-center px-[5vw]"
+          className="relative min-h-[100dvh] flex items-center justify-center px-[5vw] py-[clamp(4rem,12vh,8rem)] mb-[clamp(2rem,8vh,5rem)]"
         >
           <div
             className={`season-panel glass-panel glass-panel-${chapter.id} relative max-w-2xl w-full p-8 lg:p-12 opacity-0`}
@@ -75,6 +75,56 @@ export default function Seasons() {
             >
               {chapter.title.split(' · ').slice(1).join(' · ')}
             </h3>
+
+            {chapter.character && (
+              <div
+                className="flex items-center gap-4 mb-6 pb-6"
+                style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <div
+                  className="relative flex-shrink-0 overflow-hidden"
+                  style={{
+                    width: 'clamp(72px, 12vw, 96px)',
+                    height: 'clamp(90px, 15vw, 120px)',
+                    borderRadius: '3px',
+                    border: `1.5px solid ${chapter.color}66`,
+                    boxShadow: `0 4px 20px ${chapter.color}22`,
+                    background: chapter.character.visualGradient,
+                  }}
+                >
+                  <img
+                    src={chapter.character.image}
+                    alt={chapter.character.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p
+                    className="font-display text-white"
+                    style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.1rem)', letterSpacing: '0.08em', fontWeight: 300 }}
+                  >
+                    {chapter.character.name}
+                    <span className="ml-2" style={{ fontSize: '0.85em' }}>{chapter.character.emoji}</span>
+                  </p>
+                  <p
+                    className="font-mono mt-1.5"
+                    style={{ fontSize: 'clamp(0.6rem, 1vw, 0.7rem)', color: chapter.color, letterSpacing: '0.1em' }}
+                  >
+                    {chapter.character.role}
+                  </p>
+                  <p
+                    className="font-body mt-2 text-white/55"
+                    style={{ fontSize: 'clamp(0.75rem, 1.1vw, 0.85rem)', lineHeight: 1.7, letterSpacing: '0.03em' }}
+                  >
+                    {chapter.character.desc}
+                  </p>
+                </div>
+              </div>
+            )}
 
             <p
               className="font-body text-white/85"

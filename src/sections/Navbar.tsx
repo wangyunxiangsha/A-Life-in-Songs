@@ -1,4 +1,5 @@
 import { siteConfig } from '@/content/config';
+import AmbientMusicToggle from '@/components/AmbientMusicToggle';
 
 export default function Navbar() {
   return (
@@ -24,6 +25,7 @@ export default function Navbar() {
           {siteConfig.titleSub}
         </span>
       </div>
+      <AmbientMusicToggle />
     </nav>
   );
 }

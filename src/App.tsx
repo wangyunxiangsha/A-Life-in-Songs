@@ -1,4 +1,5 @@
 import { AppProvider } from '@/context/AppContext';
+import { AmbientMusicProvider } from '@/context/AmbientMusicContext';
 import { useLenis } from '@/hooks/useLenis';
 import VideoBackground from '@/sections/VideoBackground';
 import ParticleCanvas from '@/sections/ParticleCanvas';
@@ -39,7 +40,9 @@ function AppContent() {
 export default function App() {
   return (
     <AppProvider>
-      <AppContent />
+      <AmbientMusicProvider>
+        <AppContent />
+      </AmbientMusicProvider>
     </AppProvider>
   );
 }

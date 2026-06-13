@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { Play, Pause, Volume2 } from 'lucide-react';
+import { getActiveKey, playExclusive, stopExclusive, subscribe } from '@/lib/audioManager';
 interface AudioPlayerProps {
   src: string;
   color: string;
@@ -13,15 +14,37 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [canPlay, setCanPlay] = useState(false);
+  const audioSrc = useMemo(() => (src ? encodeURI(src) : ''), [src]);
+  const audioKey = useMemo(() => `chapter:${src}`, [src]);
+
+  const handleStop = useCallback(() => {
+    audioRef.current?.pause();
+    setPlaying(false);
+    stopExclusive(audioKey);
+  }, [audioKey]);
+
+  useEffect(() => {
+    return subscribe(() => {
+      if (getActiveKey() !== audioKey) {
+        audioRef.current?.pause();
+        setPlaying(false);
+      }
+    });
+  }, [audioKey]);
 
   const toggle = () => {
     const audio = audioRef.current;
     if (!audio || !canPlay) return;
     if (playing) {
-      audio.pause();
-      setPlaying(false);
+      handleStop();
     } else {
-      audio.play().then(() => setPlaying(true)).catch(() => {});
+      playExclusive(audioKey, handleStop);
+      audio.play()
+        .then(() => setPlaying(true))
+        .catch(() => {
+          stopExclusive(audioKey);
+          setPlaying(false);
+        });
     }
   };
 
@@ -49,7 +72,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
       <div className="flex flex-col items-center gap-4 mt-4 pt-4 border-t border-white/10">
         <audio
           ref={audioRef}
-          src={src}
+          src={audioSrc}
           onCanPlay={() => setCanPlay(true)}
           onTimeUpdate={() => {
             const a = audioRef.current;
@@ -58,7 +81,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
           onLoadedMetadata={() => {
             if (audioRef.current) setDuration(audioRef.current.duration);
           }}
-          onEnded={() => { setPlaying(false); setProgress(0); }}
+          onEnded={() => { handleStop(); setProgress(0); }}
         />
 
         {/* Big play button */}
@@ -134,7 +157,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
     >
       <audio
         ref={audioRef}
-        src={src}
+        src={audioSrc}
         onCanPlay={() => setCanPlay(true)}
         onTimeUpdate={() => {
           const a = audioRef.current;
@@ -143,7 +166,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
         onLoadedMetadata={() => {
           if (audioRef.current) setDuration(audioRef.current.duration);
         }}
-        onEnded={() => { setPlaying(false); setProgress(0); }}
+        onEnded={() => { handleStop(); setProgress(0); }}
       />
 
       <button
