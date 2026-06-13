@@ -78,7 +78,10 @@ export default function Seasons() {
         >
           <div
             className={`season-panel season-reading-panel glass-panel glass-panel-${chapter.id} relative max-w-2xl w-full p-8 lg:p-12 opacity-0`}
-            style={{ borderLeft: `4px solid ${chapter.color}` }}
+            style={{
+              borderLeft: `4px solid ${chapter.color}`,
+              ['--chapter-tint' as string]: chapter.glassBg,
+            }}
           >
             <h3
               className="font-card-display font-card-heading season-heading mb-6"
@@ -116,6 +119,7 @@ export default function Seasons() {
                     alt={chapter.character.name}
                     className="absolute inset-0 w-full h-full object-cover"
                     loading="lazy"
+                    decoding="async"
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).style.display = 'none';
                     }}

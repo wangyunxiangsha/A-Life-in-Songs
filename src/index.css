@@ -132,6 +132,27 @@
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   }
 
+  /* 章节故事卡：深色底 + 章节色点缀，保证背景视频时文字可读 */
+  .season-panel {
+    --chapter-tint: rgba(255, 255, 255, 0.06);
+    background:
+      linear-gradient(165deg, rgba(6, 10, 18, 0.84) 0%, rgba(6, 10, 18, 0.76) 100%),
+      var(--chapter-tint);
+    backdrop-filter: blur(28px) saturate(1.05);
+    -webkit-backdrop-filter: blur(28px) saturate(1.05);
+    box-shadow:
+      0 16px 48px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+
+  .season-panel .font-card-display,
+  .season-panel .font-card-name,
+  .season-panel .font-card-prose,
+  .season-panel .font-card-caption,
+  .season-panel .font-card-role {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85), 0 2px 16px rgba(0, 0, 0, 0.4);
+  }
+
   .glass-panel:hover {
     border-color: rgba(255, 255, 255, 0.35);
   }

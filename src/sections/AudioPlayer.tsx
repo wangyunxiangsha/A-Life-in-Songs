@@ -1,21 +1,44 @@
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { Play, Pause, Volume2 } from 'lucide-react';
 import { getActiveKey, playExclusive, stopExclusive, subscribe } from '@/lib/audioManager';
+import { useInViewLoad } from '@/hooks/useInViewLoad';
+
 interface AudioPlayerProps {
   src: string;
   color: string;
-  large?: boolean;    // prominent variant for About section
-  label?: string;     // custom label override
+  large?: boolean;
+  label?: string;
 }
 
 export default function AudioPlayer({ src, color, large = false, label }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const { ref: containerRef, active, activate } = useInViewLoad<HTMLDivElement>();
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [canPlay, setCanPlay] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const shouldLoad = Boolean(src) && active;
   const audioSrc = useMemo(() => (src ? encodeURI(src) : ''), [src]);
   const audioKey = useMemo(() => `chapter:${src}`, [src]);
+
+  const markCanPlay = useCallback(() => {
+    setCanPlay(true);
+    setLoadError(false);
+  }, []);
+
+  useEffect(() => {
+    setCanPlay(false);
+    setLoadError(false);
+    setPlaying(false);
+    setProgress(0);
+    setDuration(0);
+  }, [src, shouldLoad]);
+
+  useEffect(() => {
+    if (!shouldLoad) return;
+    audioRef.current?.load();
+  }, [shouldLoad, audioSrc]);
 
   const handleStop = useCallback(() => {
     audioRef.current?.pause();
@@ -33,12 +56,13 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
   }, [audioKey]);
 
   const toggle = () => {
-    const audio = audioRef.current;
-    if (!audio || !src) return;
-    if (!canPlay) {
-      audio.load();
+    if (!src) return;
+    if (!active) {
+      activate();
       return;
     }
+    const audio = audioRef.current;
+    if (!audio || !canPlay) return;
     if (playing) {
       handleStop();
     } else {
@@ -68,34 +92,47 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
 
   const statusText = !src
     ? '录音即将上线 · Coming Soon'
-    : !canPlay
-      ? '点击播放加载'
-      : label ?? (playing ? '暂停' : '聆听故事');
+    : loadError
+      ? '音频加载失败'
+      : !canPlay
+        ? shouldLoad
+          ? '音频加载中…'
+          : '靠近本章后自动加载'
+        : label ?? (playing ? '暂停' : '聆听故事');
 
-  // ── Large / prominent variant ──────────────────────────────────────────
+  const audioEvents = {
+    onCanPlay: markCanPlay,
+    onLoadedMetadata: () => {
+      markCanPlay();
+      if (audioRef.current) setDuration(audioRef.current.duration);
+    },
+    onTimeUpdate: () => {
+      const a = audioRef.current;
+      if (a && a.duration) setProgress(a.currentTime / a.duration);
+    },
+    onEnded: () => {
+      handleStop();
+      setProgress(0);
+    },
+    onError: () => setLoadError(true),
+  };
+
   if (large) {
     return (
-      <div className="flex flex-col items-center gap-4 mt-4 pt-4 border-t border-white/10">
-        <audio
-          ref={audioRef}
-          src={audioSrc}
-          preload="none"
-          onCanPlay={() => setCanPlay(true)}
-          onTimeUpdate={() => {
-            const a = audioRef.current;
-            if (a && a.duration) setProgress(a.currentTime / a.duration);
-          }}
-          onLoadedMetadata={() => {
-            if (audioRef.current) setDuration(audioRef.current.duration);
-          }}
-          onEnded={() => { handleStop(); setProgress(0); }}
-        />
+      <div ref={containerRef} className="flex flex-col items-center gap-4 mt-4 pt-4 border-t border-white/10">
+        {shouldLoad && (
+          <audio
+            ref={audioRef}
+            src={audioSrc}
+            preload="auto"
+            {...audioEvents}
+          />
+        )}
 
-        {/* Big play button */}
         <div className="flex flex-col items-center gap-3">
           <button
             onClick={toggle}
-            disabled={!src}
+            disabled={!src || loadError}
             className="relative flex items-center justify-center rounded-full transition-all duration-300"
             style={{
               width: '64px',
@@ -105,7 +142,7 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
                 : 'rgba(255,255,255,0.05)',
               border: `1.5px solid ${canPlay ? color + 'aa' : 'rgba(255,255,255,0.15)'}`,
               color: canPlay ? '#ffffff' : 'rgba(255,255,255,0.25)',
-              cursor: canPlay ? 'pointer' : 'default',
+              cursor: src && !loadError ? 'pointer' : 'default',
               boxShadow: canPlay && playing
                 ? `0 0 24px ${color}66, 0 0 48px ${color}33`
                 : canPlay
@@ -116,7 +153,6 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
             onMouseEnter={e => { if (canPlay) (e.currentTarget as HTMLElement).style.transform = 'scale(1.08)'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; }}
           >
-            {/* Ripple ring when playing */}
             {playing && (
               <span
                 className="absolute inset-0 rounded-full animate-ping"
@@ -128,10 +164,12 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
               : <Play size={22} style={{ marginLeft: '3px' }} />
             }
           </button>
-
         </div>
 
-        {/* Progress bar */}
+        <p className="font-mono" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em' }}>
+          {statusText}
+        </p>
+
         {canPlay && (
           <div className="w-full flex items-center gap-3">
             <span className="font-mono flex-shrink-0" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)' }}>
@@ -156,36 +194,30 @@ export default function AudioPlayer({ src, color, large = false, label }: AudioP
     );
   }
 
-  // ── Compact / default variant ──────────────────────────────────────────
   return (
     <div
+      ref={containerRef}
       className="season-audio-player flex items-center gap-3 mt-7 p-4 rounded-xl"
       style={{ background: 'rgba(0,0,0,0.26)', border: '1px solid rgba(255,255,255,0.22)' }}
     >
-      <audio
-        ref={audioRef}
-        src={audioSrc}
-        preload="none"
-        onCanPlay={() => setCanPlay(true)}
-        onTimeUpdate={() => {
-          const a = audioRef.current;
-          if (a && a.duration) setProgress(a.currentTime / a.duration);
-        }}
-        onLoadedMetadata={() => {
-          if (audioRef.current) setDuration(audioRef.current.duration);
-        }}
-        onEnded={() => { handleStop(); setProgress(0); }}
-      />
+      {shouldLoad && (
+        <audio
+          ref={audioRef}
+          src={audioSrc}
+          preload="auto"
+          {...audioEvents}
+        />
+      )}
 
       <button
         onClick={toggle}
-        disabled={!src}
+        disabled={!src || loadError}
         className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
         style={{
           background: canPlay ? `${color}30` : 'rgba(255,255,255,0.06)',
           border: `1px solid ${canPlay ? color + '55' : 'rgba(255,255,255,0.12)'}`,
           color: canPlay ? '#ffffff' : 'rgba(255,255,255,0.3)',
-          cursor: canPlay ? 'pointer' : 'default',
+          cursor: src && !loadError ? 'pointer' : 'default',
         }}
       >
         {playing

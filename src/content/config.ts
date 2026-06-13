@@ -1,12 +1,9 @@
-import introVideoUrl from '@/assets/intro-from-shouping-1080p.mp4';
-import ch07VideoUrl from '@/assets/ch07-1080p.mp4';
-
 // ============================================================
 //  A Life in Songs · 网站内容配置
 //  ─────────────────────────────────────────────────────────
 //  资源文件：
 //    音频 → public/audio/（已就位）
-//    视频 → public/videos/（占位，待补充 intro.mp4、ch01–ch18.mp4）
+//    视频 → public/videos/（intro.mp4、ch01.mp4 已就位；ch02–ch18 待补充）
 //    图片 → public/images/ch01–ch18.png（章节插画）
 // ============================================================
 
@@ -17,7 +14,7 @@ export const siteConfig = {
   scrollHint: '向下滚动',
   footerQuote: '「每一段路，都有一首歌」',
   copyright: '2026 @dongfangbo',
-  introVideo: introVideoUrl,
+  introVideo: '/videos/intro.mp4',
   seasonsSectionTitle: '一路歌行',
   companionsSectionTitle: '故事里的人们',
   timeSliderTicks: [
@@ -163,7 +160,7 @@ export const chapters = [
   },
   {
     id: 'senior2-plain',
-    video: ch07VideoUrl,
+    video: '/videos/ch07.mp4',
     title: '第七章 · 高二高三 · 素颜',
     story: '那个夏天，我骑着自行车去博奥补课。阳光晒在柏油路上，风从耳边掠过，车铃偶尔响一声，像给青春打拍子。教室里的空调不够冷，试卷却堆得足够高。课间休息时，耳机里放着《素颜》，旋律清淡，像刚洗过的白衬衫。那时候我们还不懂什么叫压力山大，只觉得日子紧张又明亮。现在回想起来，那大概就是青春最真实的味道——素面朝天，却满怀希望。',
     audio: '/audio/许嵩 _ 何曼婷 - 素颜.mp3',
@@ -397,7 +394,7 @@ export type Chapter = typeof chapters[number];
 /** 无章节视频时使用，背景保持纯黑 */
 export const NO_CHAPTER_VIDEO = '';
 
-/** 仅第 1 章切换专属视频；第 2–18 章不加载视频（黑底） */
+/** 有章节视频时返回路径，否则黑底 */
 export function resolveChapterVideo(chapterId: string, video: string): string {
   return (siteConfig.chapterVideoIds as readonly string[]).includes(chapterId)
     ? video

@@ -5,8 +5,8 @@ const source = readFileSync('src/content/config.ts', 'utf8');
 
 assert.match(
   source,
-  /import\s+ch07VideoUrl\s+from\s+'@\/assets\/ch07-1080p\.mp4'/,
-  'ch07 should use the optimized 1080p chapter video asset',
+  /id:\s*'senior2-plain'[\s\S]*?video:\s*'\/videos\/ch07\.mp4'/,
+  'the ch07 chapter should point at the uploaded 1080p chapter video',
 );
 
 assert.match(
@@ -17,6 +17,6 @@ assert.match(
 
 assert.match(
   source,
-  /id:\s*'senior2-plain'[\s\S]*?video:\s*ch07VideoUrl/,
-  'the ch07 chapter should point at the optimized video asset',
+  /introVideo:\s*'\/videos\/intro\.mp4'/,
+  'intro should point at the uploaded 1080p intro video',
 );
