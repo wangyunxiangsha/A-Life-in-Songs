@@ -14,7 +14,7 @@ export const siteConfig = {
   scrollHint: '向下滚动',
   footerQuote: '「每一段路，都有一首歌」',
   copyright: '2026 @dongfangbo',
-  introVideo: '/videos/intro.mp4',
+  introVideo: '/videos/首屏.mp4',
   seasonsSectionTitle: '一路歌行',
   companionsSectionTitle: '故事里的人们',
   timeSliderTicks: [

@@ -17,6 +17,6 @@ assert.match(
 
 assert.match(
   source,
-  /introVideo:\s*'\/videos\/intro\.mp4'/,
-  'intro should point at the uploaded 1080p intro video',
+  /introVideo:\s*'\/videos\/首屏\.mp4'/,
+  'intro should point at the first-screen video',
 );

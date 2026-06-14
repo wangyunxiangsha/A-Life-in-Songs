@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useApp } from '@/context/AppContext';
 import { getTimeFilter } from '@/types';
-import introPosterUrl from '@/assets/intro-poster.jpg';
 
 export default function VideoBackground() {
   const { videoSrc, sliderValue } = useApp();
@@ -16,12 +15,11 @@ export default function VideoBackground() {
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src={videoSrc}
-        poster={introPosterUrl}
         autoPlay
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         style={{ filter: filterStyle }}
       />
     </div>
