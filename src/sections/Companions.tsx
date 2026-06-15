@@ -13,6 +13,7 @@ const BOTTOM_H = 108;
 const CARD_PAD = 10;
 const CARD_W = CARD_SIZE + CARD_PAD * 2;
 const CARD_IMG_H = Math.round(CARD_SIZE * 1.15);
+const CARD_TEXT_FONT = "'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', sans-serif";
 
 const totalPages = Math.ceil(chapters.length / CARDS_PER_PAGE);
 
@@ -222,14 +223,27 @@ function CompanionCard({
           >
             <div className="text-center">
               <p
-                className="font-display"
-                style={{ fontSize: '0.82rem', color: '#222', letterSpacing: '0.05em', fontWeight: 400 }}
+                style={{
+                  fontFamily: CARD_TEXT_FONT,
+                  fontSize: '0.86rem',
+                  color: '#111',
+                  letterSpacing: '0.02em',
+                  fontWeight: 700,
+                  lineHeight: 1.25,
+                }}
               >
                 {char.name}
               </p>
               <p
-                className="font-mono mt-0.5 line-clamp-2"
-                style={{ fontSize: '0.52rem', color: chapter.color, letterSpacing: '0.06em', lineHeight: 1.4 }}
+                className="mt-0.5 line-clamp-2"
+                style={{
+                  fontFamily: CARD_TEXT_FONT,
+                  fontSize: '0.58rem',
+                  color: '#222',
+                  letterSpacing: '0.02em',
+                  lineHeight: 1.45,
+                  fontWeight: 600,
+                }}
               >
                 {char.role}
               </p>
@@ -258,26 +272,54 @@ function CompanionCard({
             }}
           />
           <p
-            className="font-display flex-shrink-0"
-            style={{ fontSize: '0.78rem', color: '#222', letterSpacing: '0.05em', marginBottom: '6px' }}
+            className="flex-shrink-0"
+            style={{
+              fontFamily: CARD_TEXT_FONT,
+              fontSize: '0.82rem',
+              color: '#111',
+              letterSpacing: '0.02em',
+              marginBottom: '8px',
+              fontWeight: 700,
+              lineHeight: 1.35,
+            }}
           >
             {char.name}
             <span
-              className="font-mono ml-1.5"
-              style={{ fontSize: '0.5rem', color: chapter.color, letterSpacing: '0.06em' }}
+              className="ml-1.5"
+              style={{
+                fontFamily: CARD_TEXT_FONT,
+                fontSize: '0.58rem',
+                color: '#222',
+                letterSpacing: '0.02em',
+                fontWeight: 600,
+              }}
             >
               {char.role}
             </span>
           </p>
           <p
-            className="font-body"
-            style={{ flex: 1, fontSize: '0.62rem', lineHeight: 1.75, color: '#555', letterSpacing: '0.03em', overflowY: 'auto' }}
+            style={{
+              flex: 1,
+              fontFamily: CARD_TEXT_FONT,
+              fontSize: '0.61rem',
+              lineHeight: 1.72,
+              color: '#222',
+              letterSpacing: '0.015em',
+              fontWeight: 600,
+              overflowY: 'auto',
+            }}
           >
             {char.intro}
           </p>
           <p
-            className="font-mono text-center flex-shrink-0 mt-1.5"
-            style={{ fontSize: '9px', color: '#bbb', letterSpacing: '0.08em' }}
+            className="text-center flex-shrink-0 mt-1.5"
+            style={{
+              fontFamily: CARD_TEXT_FONT,
+              fontSize: '0.54rem',
+              color: '#444',
+              letterSpacing: '0.02em',
+              fontWeight: 600,
+            }}
           >
             ← 点击返回
           </p>

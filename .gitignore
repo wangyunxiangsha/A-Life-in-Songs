@@ -23,3 +23,6 @@ prompt.md
 
 # Temp / recovery
 .tmp/
+
+# Local media drafts
+src/assets/*.mp4

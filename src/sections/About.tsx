@@ -7,12 +7,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
-  if (!protagonist.show) return null;
   const sectionRef = useRef<HTMLElement>(null);
   const polaroidRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!protagonist.show) return;
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         polaroidRef.current,
@@ -44,6 +45,8 @@ export default function About() {
 
     return () => ctx.revert();
   }, []);
+
+  if (!protagonist.show) return null;
 
   return (
     <section ref={sectionRef} className="relative min-h-[100dvh] z-10 flex items-center px-[5vw] py-24 lg:py-32">
