@@ -2,7 +2,7 @@
 
 > 画风与《AI人物设定-插画绘本.md》《AI分镜提示词-插画绘本.md》一致。  
 > **用法**：ChatGPT 生图时先上传「参考图」，再粘贴对应章节整段提示词。  
-> **输出**：3:4 竖图 → 存入 `public/images/character/` → 复制为 `public/images/chXX.png` → 更新 `config.ts`。
+> **输出**：3:4 竖图 → 存入 `public/images/chXX.png` → 更新 `config.ts`。
 
 ---
 
@@ -53,8 +53,7 @@
 ### 6. 文件命名
 
 ```
-public/images/character/{角色}-{章节关键词}-1.png
-→ 复制为 public/images/chXX.png
+public/images/chXX.png
 ```
 
 ---
@@ -396,9 +395,8 @@ public/images/character/{角色}-{章节关键词}-1.png
 
 每章满意后：
 
-1. 保存 `public/images/character/角色-章节-1.png`
-2. 复制为 `public/images/chXX.png`
-3. 修改 `src/content/config.ts` 对应 `character.image` 为 `/images/chXX.png`
+1. 保存为 `public/images/chXX.png`
+2. 修改 `src/content/config.ts` 对应 `character.image` 为 `/images/chXX.png`
 4. `npm run dev` 预览「四季之梦」故事卡 +「伙伴们」翻转卡
 
 ---

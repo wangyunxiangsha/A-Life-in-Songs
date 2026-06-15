@@ -22,9 +22,9 @@
 ```
 Dreamways/
 ├── public/
-│   ├── videos/          # intro.mp4、ch01.mp4（其余章节暂无，黑底）
+│   ├── videos/          # 首屏.mp4、ch01.mp4、ch07.mp4（其余章节暂无，黑底）
 │   ├── audio/           # 18 章 BGM + 氛围音乐 The Deep South
-│   └── images/          # ch01–ch18.png、character/、ref/
+│   └── images/          # ch01–ch18.png、thumbs/、ref/
 ├── src/
 │   ├── content/
 │   │   └── config.ts    # ★ 核心配置（18 章 + 站点信息）
@@ -79,11 +79,11 @@ Dreamways/
 
 ```ts
 // config.ts
-chapterVideoIds: ['childhood-61']  // 仅第 1 章有专属视频
+chapterVideoIds: ['childhood-61', 'senior2-plain']  // 第 1、7 章有专属视频
 resolveChapterVideo(id, video)      // 无视频 → 空字符串 → 黑底
 ```
 
-第 2–18 章不加载 `intro.mp4` 占位，滚动时为纯黑背景。
+其余章节不加载首屏视频占位，滚动时为纯黑背景。
 
 ## 配置字段说明
 
@@ -101,7 +101,7 @@ resolveChapterVideo(id, video)      // 无视频 → 空字符串 → 黑底
 ### chapters[]（18 项）
 
 每章：`id`、`title`、`story`、`audio`、`color`、`glassBg`、`character`（含 `image` 等）。  
-第 1 章另有 `video: '/videos/ch01.mp4'`。
+第 1、7 章另有 `video` 字段，并通过 `chapterVideoIds` 启用背景视频。
 
 ## 资源现状
 
@@ -110,9 +110,10 @@ resolveChapterVideo(id, video)      // 无视频 → 空字符串 → 黑底
 | 18 章 BGM | ✅ `public/audio/` |
 | 18 章插画 | ✅ `ch01.png` … `ch18.png` |
 | 氛围 BGM | ✅ The Deep South |
-| intro.mp4 | ✅ |
+| 首屏.mp4 | ✅ |
 | ch01.mp4 | ✅ |
-| ch02–ch18.mp4 | ❌ 未提供（黑底） |
+| ch07.mp4 | ✅ |
+| ch02–ch06、ch08–ch18.mp4 | ❌ 未提供（黑底） |
 | 角色语音 | ❌ 未配置 |
 | About 照片 | ❌ 区块未开 |
 

@@ -35,7 +35,7 @@
 | 低 | 18 章 ScrollTrigger 数量多 | 实机 Chrome 测试；避免恢复自动滚动试听 |
 | 低 | 氛围 BGM 默认开启 | 首次需用户交互才能 play（浏览器策略） |
 | 信息 | 根 README 仍为 Dreamways 框架说明 | 可加定制版链接 |
-| 信息 | ch02–ch18 无背景视频 | 黑底为预期行为，补视频后改 chapterVideoIds |
+| 信息 | ch02–ch06、ch08–ch18 无背景视频 | 黑底为预期行为，补视频后改 chapterVideoIds |
 | 信息 | 角色语音均未配置 | VoiceButton 对空 src 返回 null，符合预期 |
 
 ### 已解决问题（本会话周期）

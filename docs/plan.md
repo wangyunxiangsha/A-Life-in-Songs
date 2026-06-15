@@ -17,7 +17,7 @@
 | 站点名称 | **A Life in Songs** / 副标题「一首歌一种心情」 |
 | 区块标题 | ✅ 一路歌行 / 故事里的人们 / 浅唱·留声·沉醉 |
 | About 区块 | 暂缓（`protagonist.show: false`） |
-| 背景视频策略 | 仅第 1 章有专属视频；第 2–18 章黑底，不用 intro 占位 |
+| 背景视频策略 | 第 1、7 章有专属视频；其余章节黑底，不用首屏视频占位 |
 | 音频策略 | 氛围 BGM + 章节点击播放，全局互斥 |
 
 ## 章节清单（当前版本）
@@ -60,11 +60,12 @@
 
 - [x] 18 首章节歌曲 mp3 → `public/audio/`
 - [x] 18 张章节插画 png → `public/images/ch01–ch18.png`
-- [x] 角色卡参考图 → `public/images/character/`、`ref/`
+- [x] 18 张角色卡正式图 → `public/images/ch01–ch18.png`；真人参考照 → `public/images/ref/`
 - [x] 氛围 BGM → `Adam Young - The Deep South.mp3`
-- [x] 首屏视频 `intro.mp4`
+- [x] 首屏视频 `首屏.mp4`
 - [x] 第 1 章背景视频 `ch01.mp4`
-- [ ] 第 2–18 章专属背景视频（当前黑底，可选后续补充）
+- [x] 第 7 章背景视频 `ch07.mp4`
+- [ ] 第 2–6、8–18 章专属背景视频（当前黑底，可选后续补充）
 - [ ] About 个人照片 `me.png`（区块未开启）
 - [ ] 角色语音（`character.audio` 均为空）
 
@@ -107,6 +108,7 @@
 | 2026-06-12 | 角色卡恢复分页；章节故事区恢复小图肖像 |
 | 2026-06-12 | 恢复音频互斥 + 氛围 BGM（`audioManager` + `AmbientMusicContext`） |
 | 2026-06-12 | 推送至 GitHub `wangyunxiangsha/A-Life-in-Songs` |
+| 2026-06-15 | 清理重复/未引用旧资源；文档路径同步为 `首屏.mp4`、`ch01/ch07` 与 `chXX.png` |
 
 ## 站点基本信息（当前）
 
@@ -126,7 +128,7 @@
 ## 待用户补充（非阻塞）
 
 1. **About 区块**：照片 + 自我介绍 + 可选语音
-2. **第 2–18 章背景视频**：当前黑底可接受，补全后更新 `chapterVideoIds`
+2. **第 2–6、8–18 章背景视频**：当前黑底可接受，补全后更新 `chapterVideoIds`
 3. **角色语音**：18 段短音频（可选）
 4. **公开部署**：域名 / GitHub Pages 方案
 
