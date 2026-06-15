@@ -24,6 +24,18 @@ assert.match(
 );
 
 assert.match(
+  seasonsSource,
+  /\/images\/thumbs\/ch\$\{match\[1\]\}\.webp/,
+  'season character summary should load the lightweight webp thumbnail first',
+);
+
+assert.match(
+  seasonsSource,
+  /img\.src = chapter\.character\.image/,
+  'season character summary should fall back to the original png when a thumbnail is missing',
+);
+
+assert.match(
   cssSource,
   /\.season-reading-panel[\s\S]*background:\s*linear-gradient[\s\S]*rgba\(8,\s*18,\s*22,\s*0\.82\)/,
   'reading layer should use a darker translucent base for contrast',

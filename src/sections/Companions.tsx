@@ -3,7 +3,7 @@ import { chapters, siteConfig } from '@/content/config';
 import { Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { getActiveKey, playExclusive, stopExclusive, stopCurrentAudio, subscribe } from '@/lib/audioManager';
+import { getActiveKey, playExclusive, stopExclusive, subscribe } from '@/lib/audioManager';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -344,7 +344,6 @@ export default function Companions() {
     const clamped = Math.max(0, Math.min(totalPages - 1, next));
     setPage(clamped);
     setHovered(null);
-    stopCurrentAudio();
   }, []);
 
   const toggleFlip = (globalIndex: number) =>

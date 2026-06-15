@@ -16,6 +16,11 @@ function parseChapterHeading(title: string): { era: string | null; song: string 
   return { era: null, song: displayParts.join(' · ') };
 }
 
+function characterThumb(fullPng: string): string {
+  const match = fullPng.match(/\/images\/ch(\d{2})\.png$/);
+  return match ? `/images/thumbs/ch${match[1]}.webp` : fullPng;
+}
+
 export default function Seasons() {
   const { setChapter, setVideoSrc } = useApp();
   const sectionRef = useRef<HTMLElement>(null);
@@ -115,13 +120,18 @@ export default function Seasons() {
                   }}
                 >
                   <img
-                    src={chapter.character.image}
+                    src={characterThumb(chapter.character.image)}
                     alt={chapter.character.name}
                     className="absolute inset-0 w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
                     onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      const img = e.currentTarget as HTMLImageElement;
+                      if (img.src.endsWith('.webp')) {
+                        img.src = chapter.character.image;
+                        return;
+                      }
+                      img.style.display = 'none';
                     }}
                   />
                 </div>
