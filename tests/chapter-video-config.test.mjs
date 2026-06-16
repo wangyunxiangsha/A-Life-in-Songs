@@ -11,8 +11,44 @@ assert.match(
 
 assert.match(
   source,
+  /id:\s*'primary-run'[\s\S]*?video:\s*'\/videos\/ch02\.mp4'/,
+  'the ch02 chapter should point at the generated chapter video',
+);
+
+assert.match(
+  source,
+  /id:\s*'junior-moon'[\s\S]*?video:\s*'\/videos\/ch03\.mp4'/,
+  'the ch03 chapter should point at the generated chapter video',
+);
+
+assert.match(
+  source,
+  /id:\s*'college-dance'[\s\S]*?video:\s*'\/videos\/ch12\.mp4'/,
+  'the ch12 chapter should point at the generated chapter video',
+);
+
+assert.match(
+  source,
+  /chapterVideoIds:\s*\[[^\]]*'primary-run'/s,
+  'chapterVideoIds should enable the ch02 chapter video',
+);
+
+assert.match(
+  source,
+  /chapterVideoIds:\s*\[[^\]]*'junior-moon'/s,
+  'chapterVideoIds should enable the ch03 chapter video',
+);
+
+assert.match(
+  source,
   /chapterVideoIds:\s*\[[^\]]*'senior2-plain'/s,
   'chapterVideoIds should enable the ch07 chapter video',
+);
+
+assert.match(
+  source,
+  /chapterVideoIds:\s*\[[^\]]*'college-dance'/s,
+  'chapterVideoIds should enable the ch12 chapter video',
 );
 
 assert.match(
