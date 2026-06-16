@@ -17,14 +17,14 @@ assert.match(
 
 assert.match(
   source,
-  /preload="auto"/,
-  'intro video should load immediately so the first screen paints without an old fallback frame',
+  /preload="metadata"/,
+  'background video should avoid auto-preloading full media before playback',
 );
 
-assert.equal(
-  source.includes('intro-poster'),
-  false,
-  'first screen should not flash the old intro poster before the video paints',
+assert.match(
+  source,
+  /poster=\{posterSrc\}/,
+  'background should keep a poster visible until the video paints',
 );
 
 assert.equal(

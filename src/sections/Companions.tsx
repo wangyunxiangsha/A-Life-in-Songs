@@ -4,6 +4,7 @@ import { Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getActiveKey, playExclusive, stopExclusive, subscribe } from '@/lib/audioManager';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,6 +27,7 @@ function VoiceButton({ src, color }: { src: string; color: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [canPlay, setCanPlay] = useState(false);
+  const [shouldLoadAudio, setShouldLoadAudio] = useState(false);
   const audioSrc = useMemo(() => (src ? encodeURI(src) : ''), [src]);
   const audioKey = useMemo(() => `voice:${src}`, [src]);
 
@@ -46,6 +48,10 @@ function VoiceButton({ src, color }: { src: string; color: string }) {
 
   const toggle = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!shouldLoadAudio) {
+      setShouldLoadAudio(true);
+      return;
+    }
     const a = audioRef.current;
     if (!a || !canPlay) return;
 
@@ -67,15 +73,18 @@ function VoiceButton({ src, color }: { src: string; color: string }) {
 
   return (
     <div className="flex flex-col items-center gap-1" onClick={e => e.stopPropagation()}>
-      <audio
-        ref={audioRef}
-        src={audioSrc}
-        onCanPlay={() => setCanPlay(true)}
-        onEnded={handleStop}
-      />
+      {shouldLoadAudio && (
+        <audio
+          ref={audioRef}
+          src={audioSrc}
+          preload="metadata"
+          onCanPlay={() => setCanPlay(true)}
+          onEnded={handleStop}
+        />
+      )}
       <button
         onClick={toggle}
-        disabled={!canPlay}
+        disabled={shouldLoadAudio && !canPlay}
         className="relative flex items-center justify-center rounded-full transition-all duration-300"
         style={{
           width: '36px', height: '36px',
@@ -111,6 +120,7 @@ function CompanionCard({
   hovered,
   onToggleFlip,
   onHover,
+  isMobile,
 }: {
   chapter: Chapter;
   index: number;
@@ -118,6 +128,7 @@ function CompanionCard({
   hovered: boolean;
   onToggleFlip: () => void;
   onHover: (v: boolean) => void;
+  isMobile: boolean;
 }) {
   const char = chapter.character;
   const cardH = CARD_PAD + CARD_IMG_H + BOTTOM_H;
@@ -140,8 +151,8 @@ function CompanionCard({
       <div
         style={{
           position: 'relative', width: '100%', height: '100%',
-          transformStyle: 'preserve-3d',
-          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+          transformStyle: isMobile ? 'flat' : 'preserve-3d',
+          transform: isMobile ? 'none' : flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
           transition: 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
@@ -152,7 +163,7 @@ function CompanionCard({
             backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
             background: '#fff', borderRadius: '4px',
             boxShadow: hovered ? '0 12px 36px rgba(0,0,0,0.35)' : '0 6px 24px rgba(0,0,0,0.22)',
-            cursor: 'pointer', display: 'flex', flexDirection: 'column', overflow: 'hidden',
+            cursor: 'pointer', display: isMobile && flipped ? 'none' : 'flex', flexDirection: 'column', overflow: 'hidden',
           }}
         >
           <div
@@ -257,10 +268,10 @@ function CompanionCard({
           style={{
             position: 'absolute', inset: 0,
             backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
+            transform: isMobile ? 'none' : 'rotateY(180deg)',
             background: '#fff', borderRadius: '4px',
             boxShadow: hovered ? '0 12px 36px rgba(0,0,0,0.35)' : '0 6px 24px rgba(0,0,0,0.22)',
-            cursor: 'pointer', display: 'flex', flexDirection: 'column',
+            cursor: 'pointer', display: isMobile && !flipped ? 'none' : 'flex', flexDirection: 'column',
             padding: '10px', overflow: 'hidden',
           }}
         >
@@ -336,6 +347,7 @@ export default function Companions() {
   const [flipped, setFlipped] = useState<boolean[]>(() => chapters.map(() => false));
   const [hovered, setHovered] = useState<number | null>(null);
   const [entered, setEntered] = useState(false);
+  const isMobile = useIsMobile();
 
   const pageStart = page * CARDS_PER_PAGE;
   const pageChapters = chapters.slice(pageStart, pageStart + CARDS_PER_PAGE);
@@ -468,6 +480,7 @@ export default function Companions() {
                 hovered={hovered === globalIndex}
                 onToggleFlip={() => toggleFlip(globalIndex)}
                 onHover={v => setHovered(v ? globalIndex : null)}
+                isMobile={isMobile}
               />
             );
           })}

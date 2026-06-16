@@ -4,6 +4,7 @@ import { chapters, siteConfig, resolveChapterVideo } from '@/content/config';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import AudioPlayer from './AudioPlayer';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +24,7 @@ function characterThumb(fullPng: string): string {
 
 export default function Seasons() {
   const { setChapter, setVideoSrc } = useApp();
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -42,8 +44,8 @@ export default function Seasons() {
           trigger: el,
           start: 'top center',
           end: 'bottom center',
-          onEnter:     () => { setChapter(chapter.id); setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '')); },
-          onEnterBack: () => { setChapter(chapter.id); setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '')); },
+          onEnter:     () => { setChapter(chapter.id); setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '', isMobile)); },
+          onEnterBack: () => { setChapter(chapter.id); setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '', isMobile)); },
         });
 
         const panel = el.querySelector('.season-panel');
@@ -60,7 +62,7 @@ export default function Seasons() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [setChapter, setVideoSrc]);
+  }, [isMobile, setChapter, setVideoSrc]);
 
   return (
     <section ref={sectionRef} className="relative z-10">

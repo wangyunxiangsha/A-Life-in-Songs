@@ -31,6 +31,8 @@ export const siteConfig = {
   },
   /** 仅这些章节会切换专属背景视频；其余章节黑底，不加载 intro */
   chapterVideoIds: ['childhood-61', 'primary-run', 'junior-moon', 'senior2-plain', 'college-dance'] as const,
+  /** 手机端只允许少量关键章节播放视频，其余章节使用静态背景，避免弱网卡顿 */
+  mobileVideoIds: ['childhood-61', 'junior-moon', 'senior2-plain', 'college-dance'] as const,
 };
 
 export const protagonist = {
@@ -398,8 +400,9 @@ export type Chapter = typeof chapters[number];
 export const NO_CHAPTER_VIDEO = '';
 
 /** 有章节视频时返回路径，否则黑底 */
-export function resolveChapterVideo(chapterId: string, video: string): string {
-  return (siteConfig.chapterVideoIds as readonly string[]).includes(chapterId)
+export function resolveChapterVideo(chapterId: string, video: string, isMobile = false): string {
+  const enabledIds = isMobile ? siteConfig.mobileVideoIds : siteConfig.chapterVideoIds;
+  return (enabledIds as readonly string[]).includes(chapterId)
     ? video
     : NO_CHAPTER_VIDEO;
 }
