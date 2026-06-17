@@ -148,3 +148,16 @@ npm run build
 - 规范：`standard.md`
 - 阶段总结：`summary.md`
 - 文档索引：`document.md`
+
+## 2026-06-16 媒体加载策略补充
+
+近期已按“大 App 的资源加载思路”做过一轮移动端优化，核心原则是：首屏先出轻量可见内容，视频只在必要章节加载，音频只在用户点击后挂载。
+
+- 背景视频由 `src/sections/VideoBackground.tsx` 统一管理：先显示 poster，再在视频 `loadeddata` 后淡入视频。
+- 视频预加载策略为 `preload="metadata"`，避免页面打开时直接拉取整段 MP4。
+- 桌面端视频白名单由 `siteConfig.chapterVideoIds` 控制；移动端视频白名单由 `siteConfig.mobileVideoIds` 控制。
+- `resolveChapterVideo(id, video, isMobile)` 会根据端类型决定是否返回视频路径；未启用的章节返回空字符串。
+- 当前已接入的视频资源包括：`首屏.mp4`、`ch01.mp4`、`ch02.mp4`、`ch03.mp4`、`ch07.mp4`、`ch12.mp4`。
+- 章节背景 poster 使用 `public/images/thumbs/chXX.webp`，用于替代原始 `chXX.png` 作为背景兜底图；原始 PNG 继续用于角色卡和章节插图。
+- 手机端角色卡不再依赖 3D flip 作为核心阅读路径，点击卡片后直接切换正反面内容，保证微信/内置浏览器里文字可见。
+- 角色语音播放器延迟挂载，只有用户点击播放时才创建音频元素。

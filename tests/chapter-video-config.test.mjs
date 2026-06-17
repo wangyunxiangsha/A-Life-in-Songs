@@ -5,8 +5,8 @@ const source = readFileSync('src/content/config.ts', 'utf8');
 
 assert.match(
   source,
-  /id:\s*'senior2-plain'[\s\S]*?video:\s*'\/videos\/ch07\.trim\.mp4'/,
-  'the ch07 chapter should point at the trimmed chapter video',
+  /id:\s*'senior2-plain'[\s\S]*?video:\s*'\/videos\/ch07\.mp4'/,
+  'the ch07 chapter should point at the standard chapter video path',
 );
 
 assert.match(

@@ -139,3 +139,12 @@
 - [ ] 公开部署时评估 BGM 版权（章节歌 + 氛围曲）
 - [ ] About 开启后补充 `protagonist` 配置与 polaroid 展示
 - [ ] 根目录 `README.md` 可增加「A Life in Songs 定制版」说明链接至 `docs/readme.md`
+
+## 2026-06-16 近期变更补充
+
+- 已补入 `ch03.mp4`、`ch12.mp4`，并将第 7 章视频路径统一为 `public/videos/ch07.mp4`。
+- 已采用移动端媒体加载方案 B：桌面端与移动端分别维护视频白名单，移动端只加载关键章节视频。
+- 背景视频组件改为轻量 poster 先显示，视频仅预取 metadata，并在加载完成后淡入。
+- 手机端角色卡翻面改为平面切换，避免内置浏览器对 3D transform 支持不稳定导致文字不可见。
+- 角色语音音频改为点击后再挂载，避免页面初始阶段加载过多音频资源。
+- 轻量背景 poster 统一使用 `public/images/thumbs/chXX.webp`，用于页面背景兜底；原始 `chXX.png` 保持作为高清插图资源。

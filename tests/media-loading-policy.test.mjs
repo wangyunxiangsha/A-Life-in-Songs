@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 
 const configSource = readFileSync('src/content/config.ts', 'utf8');
 const videoSource = readFileSync('src/sections/VideoBackground.tsx', 'utf8');
@@ -28,6 +28,28 @@ assert.match(
   /poster=\{posterSrc\}/,
   'background video should keep a poster visible while media loads',
 );
+
+assert.match(
+  videoSource,
+  /\/images\/thumbs\/ch\$\{match\[1\]\}\.webp/,
+  'chapter background posters should use lightweight webp files instead of the original large PNGs',
+);
+
+for (let index = 1; index <= 18; index += 1) {
+  const chapterId = String(index).padStart(2, '0');
+  const posterPath = `public/images/thumbs/ch${chapterId}.webp`;
+
+  assert.equal(
+    existsSync(posterPath),
+    true,
+    `lightweight poster should exist for chapter ${chapterId}`,
+  );
+
+  assert.ok(
+    statSync(posterPath).size < 500 * 1024,
+    `lightweight poster for chapter ${chapterId} should stay under 500KB`,
+  );
+}
 
 assert.match(
   companionsSource,

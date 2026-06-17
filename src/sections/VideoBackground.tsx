@@ -5,7 +5,7 @@ import { siteConfig } from '@/content/config';
 
 function chapterPoster(fullPng: string | undefined): string {
   const match = fullPng?.match(/\/images\/ch(\d{2})\.png$/);
-  return match ? `/images/ch${match[1]}.png` : '/images/intro-poster.jpg';
+  return match ? `/images/thumbs/ch${match[1]}.webp` : '/images/intro-poster.jpg';
 }
 
 export default function VideoBackground() {
