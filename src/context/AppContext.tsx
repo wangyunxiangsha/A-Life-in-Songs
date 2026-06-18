@@ -1,27 +1,23 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { chapters, siteConfig } from '@/content/config';
 import type { Chapter } from '@/content/config';
-
-interface AppState {
-  currentChapter: Chapter;
-  sliderValue: number;
-  videoSrc: string;
-  setChapter: (id: string) => void;
-  setSliderValue: (value: number) => void;
-  setVideoSrc: (src: string) => void;
-}
-
-const AppContext = createContext<AppState | null>(null);
+import { AppContext } from '@/context/appContextValue';
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentChapter, setCurrentChapterState] = useState<Chapter>(chapters[0]);
   const [sliderValue, setSliderValueState] = useState(0.15);
   const [videoSrc, setVideoSrcState] = useState(siteConfig.introVideo);
+  const chaptersById = useMemo(
+    () => new Map(chapters.map((chapter) => [chapter.id, chapter])),
+    [],
+  );
 
   const setChapter = useCallback((id: string) => {
-    const chapter = chapters.find(c => c.id === id);
-    if (chapter) setCurrentChapterState(chapter);
-  }, []);
+    const chapter = chaptersById.get(id);
+    if (chapter) {
+      setCurrentChapterState((prev) => prev.id === id ? prev : chapter);
+    }
+  }, [chaptersById]);
 
   const setSliderValue = useCallback((value: number) => {
     setSliderValueState(Math.max(0, Math.min(1, value)));
@@ -31,15 +27,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setVideoSrcState((prev) => (prev === src ? prev : src));
   }, []);
 
+  const value = useMemo(() => ({
+    currentChapter,
+    sliderValue,
+    videoSrc,
+    setChapter,
+    setSliderValue,
+    setVideoSrc,
+  }), [currentChapter, sliderValue, videoSrc, setChapter, setSliderValue, setVideoSrc]);
+
   return (
-    <AppContext.Provider value={{ currentChapter, sliderValue, videoSrc, setChapter, setSliderValue, setVideoSrc }}>
+    <AppContext.Provider value={value}>
       {children}
     </AppContext.Provider>
   );
 }
 
-export function useApp() {
-  const ctx = useContext(AppContext);
-  if (!ctx) throw new Error('useApp must be used within AppProvider');
-  return ctx;
-}

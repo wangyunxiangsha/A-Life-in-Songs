@@ -1,18 +1,17 @@
 import React, {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import { siteConfig } from '@/content/config';
 import { getActiveKey, playExclusive, stopExclusive, subscribe } from '@/lib/audioManager';
+import { AmbientMusicContext } from '@/context/ambientMusicContextValue';
+import type { AmbientLoadStatus, AmbientMusicState } from '@/context/ambientMusicContextValue';
 
 const AMBIENT_KEY = 'ambient';
 const PREF_KEY = 'ambient-music-enabled';
-
-export type AmbientLoadStatus = 'loading' | 'ready' | 'error';
 
 function readWantsEnabled(): boolean {
   try {
@@ -25,18 +24,6 @@ function readWantsEnabled(): boolean {
 function resolveAudioSrc(path: string) {
   return encodeURI(path);
 }
-
-interface AmbientMusicState {
-  enabled: boolean;
-  playing: boolean;
-  status: AmbientLoadStatus;
-  available: boolean;
-  toggle: () => void;
-  labelOn: string;
-  labelOff: string;
-}
-
-const AmbientMusicContext = createContext<AmbientMusicState | null>(null);
 
 export function AmbientMusicProvider({ children }: { children: React.ReactNode }) {
   const { ambientMusic } = siteConfig;
@@ -103,7 +90,7 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => () => stopAmbient(), [stopAmbient]);
 
-  const value: AmbientMusicState = {
+  const value = useMemo<AmbientMusicState>(() => ({
     enabled,
     playing,
     status,
@@ -111,7 +98,7 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
     toggle,
     labelOn: ambientMusic.labelOn,
     labelOff: ambientMusic.labelOff,
-  };
+  }), [ambientMusic.labelOff, ambientMusic.labelOn, enabled, playing, status, toggle]);
 
   return (
     <AmbientMusicContext.Provider value={value}>
@@ -129,8 +116,3 @@ export function AmbientMusicProvider({ children }: { children: React.ReactNode }
   );
 }
 
-export function useAmbientMusic() {
-  const ctx = useContext(AmbientMusicContext);
-  if (!ctx) throw new Error('useAmbientMusic must be used within AmbientMusicProvider');
-  return ctx;
-}

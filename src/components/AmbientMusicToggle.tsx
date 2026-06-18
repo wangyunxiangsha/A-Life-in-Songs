@@ -1,5 +1,5 @@
 import { Volume2, VolumeX } from 'lucide-react';
-import { useAmbientMusic } from '@/context/AmbientMusicContext';
+import { useAmbientMusic } from '@/context/useAmbientMusic';
 
 export default function AmbientMusicToggle() {
   const { enabled, available, status, toggle, labelOn, labelOff } = useAmbientMusic();

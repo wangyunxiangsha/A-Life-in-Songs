@@ -4,6 +4,7 @@ import { Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getActiveKey, playExclusive, stopExclusive, subscribe } from '@/lib/audioManager';
+import { chapterImageThumb } from '@/lib/chapterMedia';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -17,11 +18,6 @@ const CARD_IMG_H = Math.round(CARD_SIZE * 1.15);
 const CARD_TEXT_FONT = "'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', sans-serif";
 
 const totalPages = Math.ceil(chapters.length / CARDS_PER_PAGE);
-
-function cardThumb(fullPng: string): string {
-  const match = fullPng.match(/\/images\/ch(\d{2})\.png$/);
-  return match ? `/images/thumbs/ch${match[1]}.webp` : fullPng;
-}
 
 function VoiceButton({ src, color }: { src: string; color: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -202,7 +198,7 @@ function CompanionCard({
               {char.emoji}
             </span>
             <img
-              src={cardThumb(char.image)}
+              src={chapterImageThumb(char.image)}
               alt={char.name}
               className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
               loading="eager"

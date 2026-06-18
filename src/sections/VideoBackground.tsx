@@ -1,12 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useApp } from '@/context/AppContext';
+import { useApp } from '@/context/useApp';
 import { getTimeFilter } from '@/types';
 import { siteConfig } from '@/content/config';
-
-function chapterPoster(fullPng: string | undefined): string {
-  const match = fullPng?.match(/\/images\/ch(\d{2})\.png$/);
-  return match ? `/images/thumbs/ch${match[1]}.webp` : '/images/intro-poster.jpg';
-}
+import { chapterPosterFromImage } from '@/lib/chapterMedia';
 
 export default function VideoBackground() {
   const { currentChapter, videoSrc, sliderValue } = useApp();
@@ -15,7 +11,7 @@ export default function VideoBackground() {
   const posterSrc = useMemo(() => (
     videoSrc === siteConfig.introVideo
       ? '/images/intro-poster.jpg'
-      : chapterPoster(currentChapter.character?.image)
+      : chapterPosterFromImage(currentChapter.character?.image)
   ), [currentChapter.character?.image, videoSrc]);
 
   const filterStyle = useMemo(() => {

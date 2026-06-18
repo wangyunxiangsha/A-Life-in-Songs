@@ -9,6 +9,10 @@
     "test:encoding": "node tests/text-encoding.test.mjs",
     "test:media": "node tests/media-budget.test.mjs",
     "test:deps": "node tests/dependency-slimming.test.mjs",
+    "test:scroll": "node tests/scroll-state-optimization.test.mjs",
+    "test:helpers": "node tests/chapter-media-helpers.test.mjs",
+    "test:context": "node tests/context-fast-refresh.test.mjs",
+    "test:context-value": "node tests/context-value-memoization.test.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

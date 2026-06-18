@@ -1,32 +1,23 @@
-import { useRef, useEffect } from 'react';
-import { useApp } from '@/context/AppContext';
+import { useRef, useEffect, useCallback } from 'react';
+import { useApp } from '@/context/useApp';
 import { chapters, siteConfig, resolveChapterVideo } from '@/content/config';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import AudioPlayer from './AudioPlayer';
+import { chapterImageThumb, parseChapterHeading } from '@/lib/chapterMedia';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 gsap.registerPlugin(ScrollTrigger);
-
-function parseChapterHeading(title: string): { era: string | null; song: string } {
-  const parts = title.split(' · ').filter(Boolean);
-  const displayParts = parts[0]?.includes('章') ? parts.slice(1) : parts;
-  if (displayParts.length >= 2) {
-    return { era: displayParts[0], song: displayParts.slice(1).join(' · ') };
-  }
-  return { era: null, song: displayParts.join(' · ') };
-}
-
-function characterThumb(fullPng: string): string {
-  const match = fullPng.match(/\/images\/ch(\d{2})\.png$/);
-  return match ? `/images/thumbs/ch${match[1]}.webp` : fullPng;
-}
 
 export default function Seasons() {
   const { setChapter, setVideoSrc } = useApp();
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const applyChapterMedia = useCallback((chapter: (typeof chapters)[number]) => {
+    setChapter(chapter.id);
+    setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '', isMobile));
+  }, [isMobile, setChapter, setVideoSrc]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -44,8 +35,8 @@ export default function Seasons() {
           trigger: el,
           start: 'top center',
           end: 'bottom center',
-          onEnter:     () => { setChapter(chapter.id); setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '', isMobile)); },
-          onEnterBack: () => { setChapter(chapter.id); setVideoSrc(resolveChapterVideo(chapter.id, chapter.video ?? '', isMobile)); },
+          onEnter: () => applyChapterMedia(chapter),
+          onEnterBack: () => applyChapterMedia(chapter),
         });
 
         const panel = el.querySelector('.season-panel');
@@ -62,7 +53,7 @@ export default function Seasons() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [isMobile, setChapter, setVideoSrc]);
+  }, [applyChapterMedia, setVideoSrc]);
 
   return (
     <section ref={sectionRef} className="relative z-10">
@@ -122,7 +113,7 @@ export default function Seasons() {
                   }}
                 >
                   <img
-                    src={characterThumb(chapter.character.image)}
+                    src={chapterImageThumb(chapter.character.image)}
                     alt={chapter.character.name}
                     className="absolute inset-0 w-full h-full object-cover"
                     loading="lazy"

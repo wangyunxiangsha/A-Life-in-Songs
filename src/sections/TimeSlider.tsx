@@ -1,5 +1,5 @@
 import { useRef, useCallback, useEffect } from 'react';
-import { useApp } from '@/context/AppContext';
+import { useApp } from '@/context/useApp';
 import { siteConfig } from '@/content/config';
 
 export default function TimeSlider() {
