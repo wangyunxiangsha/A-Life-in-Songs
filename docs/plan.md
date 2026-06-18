@@ -6,6 +6,8 @@
 
 **GitHub 仓库**：[wangyunxiangsha/A-Life-in-Songs](https://github.com/wangyunxiangsha/A-Life-in-Songs)
 
+**Zeabur 预览站**：[https://a-life-in-songs.preview.aliyun-zeabur.cn/](https://a-life-in-songs.preview.aliyun-zeabur.cn/)
+
 ## 需求对齐（已确认）
 
 | 项 | 结论 |
@@ -87,9 +89,9 @@
 
 - [x] 全站浏览与音频互斥联调
 - [x] 代码推送 GitHub（2026-06-12，用户确认成功）
+- [x] Zeabur 预览部署：[a-life-in-songs.preview.aliyun-zeabur.cn](https://a-life-in-songs.preview.aliyun-zeabur.cn/)
 - [ ] 全 18 章背景视频补全（可选）
 - [ ] About 区块开启（待用户提供素材）
-- [ ] 公开部署 / GitHub Pages（待用户决定）
 - [ ] 角色语音录制（可选）
 
 ## 需求变更记录
@@ -109,6 +111,7 @@
 | 2026-06-12 | 恢复音频互斥 + 氛围 BGM（`audioManager` + `AmbientMusicContext`） |
 | 2026-06-12 | 推送至 GitHub `wangyunxiangsha/A-Life-in-Songs` |
 | 2026-06-15 | 清理重复/未引用旧资源；文档路径同步为 `首屏.mp4`、`ch01/ch07` 与 `chXX.png` |
+| 2026-06-18 | Zeabur 预览站已部署：`https://a-life-in-songs.preview.aliyun-zeabur.cn/` |
 
 ## 站点基本信息（当前）
 
@@ -130,13 +133,12 @@
 1. **About 区块**：照片 + 自我介绍 + 可选语音
 2. **第 2–6、8–18 章背景视频**：当前黑底可接受，补全后更新 `chapterVideoIds`
 3. **角色语音**：18 段短音频（可选）
-4. **公开部署**：域名 / GitHub Pages 方案
 
 ## 改进计划
 
 - [ ] 将 `chapterVideoIds` 扩展为全部 18 章就绪后批量开启
 - [ ] 考虑章节进度指示或快速跳转（18 章滚动较长）
-- [ ] 公开部署时评估 BGM 版权（章节歌 + 氛围曲）
+- [ ] 对外分享 Zeabur 预览站前评估 BGM 版权（章节歌 + 氛围曲）
 - [ ] About 开启后补充 `protagonist` 配置与 polaroid 展示
 - [ ] 根目录 `README.md` 可增加「A Life in Songs 定制版」说明链接至 `docs/readme.md`
 

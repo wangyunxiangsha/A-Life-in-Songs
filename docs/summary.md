@@ -1,7 +1,8 @@
 # 项目总结 · A Life in Songs
 
-> 状态：**可本地预览，已推送 GitHub** — 核心内容与功能已就位，背景视频与 About 待补。  
-> 最后更新：2026-06-15
+> 状态：**Zeabur 预览已部署，已推送 GitHub** — 核心内容与功能已就位，背景视频与 About 待补。  
+> 预览地址：[https://a-life-in-songs.preview.aliyun-zeabur.cn/](https://a-life-in-songs.preview.aliyun-zeabur.cn/)  
+> 最后更新：2026-06-18
 
 ## 项目目标
 
@@ -37,6 +38,7 @@
 
 - `npm run build` 通过
 - GitHub：[wangyunxiangsha/A-Life-in-Songs](https://github.com/wangyunxiangsha/A-Life-in-Songs)
+- Zeabur 预览：[https://a-life-in-songs.preview.aliyun-zeabur.cn/](https://a-life-in-songs.preview.aliyun-zeabur.cn/)
 - 主要提交：`e3b2271`（内容与媒体）、`da04c17`（音频与 UI）
 
 ### 文档
@@ -61,19 +63,18 @@
 | P2 | 第 2–18 章背景视频（可选，当前黑底可用） |
 | P2 | About 区块（照片 + 简介） |
 | P3 | 18 段角色语音 |
-| P3 | 公开部署（GitHub Pages / 自有域名） |
 | P3 | 章节导航或进度条 |
 
 ## 风险与注意
 
-- **版权**：18 首流行歌 + 氛围曲公开部署需自行评估
+- **版权**：18 首流行歌 + 氛围曲在线预览/公开分享需自行评估
 - **隐私**：故事涉及真实人物，公开前需脱敏确认
 - **网络**：国内访问 GitHub 推送可能需代理
 - **性能**：18 章 ScrollTrigger 在低端机仍可能偏重，避免再加自动预载大量媒体
 
 ## 阶段评价
 
-项目已从「文案准备」进入 **可演示成品** 阶段：打开网站可浏览 18 章故事、听章节歌与氛围音乐、翻看角色卡。距离「完整视觉体验」主要差背景视频批量补全与 About 区块；距离「对外发布」差部署方案与版权确认。
+项目已从「文案准备」进入 **可在线预览成品** 阶段：打开 Zeabur 预览站可浏览 18 章故事、听章节歌与氛围音乐、翻看角色卡。距离「完整视觉体验」主要差背景视频批量补全与 About 区块；对外分享前仍建议确认版权与隐私边界。
 
 ## 2026-06-16 补充总结
 
