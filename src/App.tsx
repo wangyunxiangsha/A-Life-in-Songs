@@ -7,6 +7,7 @@ import VideoBackground from '@/sections/VideoBackground';
 import Navbar from '@/sections/Navbar';
 import TimeSlider from '@/sections/TimeSlider';
 import Hero from '@/sections/Hero';
+import ChapterProgressNav from '@/components/ChapterProgressNav';
 
 const About = lazy(() => import('@/sections/About'));
 const Companions = lazy(() => import('@/sections/Companions'));
@@ -62,6 +63,7 @@ function AppContent() {
       {/* Fixed UI */}
       <Navbar />
       <TimeSlider />
+      <ChapterProgressNav />
 
       {/* Page content */}
       <main className="relative z-10">

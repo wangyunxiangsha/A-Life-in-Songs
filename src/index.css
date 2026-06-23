@@ -218,4 +218,168 @@
     z-index: 1;
     background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
   }
+
+  .chapter-progress-nav {
+    position: fixed;
+    top: 50%;
+    right: clamp(18px, 2.4vw, 36px);
+    z-index: 45;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: translateY(-50%);
+  }
+
+  .chapter-progress-rail {
+    position: relative;
+    width: 1px;
+    height: min(58vh, 440px);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .chapter-progress-rail span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.18));
+    transition: height 0.35s ease;
+  }
+
+  .chapter-progress-dots {
+    display: grid;
+    gap: 8px;
+  }
+
+  .chapter-progress-dot {
+    --chapter-color: rgba(255, 255, 255, 0.8);
+    position: relative;
+    display: grid;
+    width: 18px;
+    height: 18px;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .chapter-progress-dot-core {
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.42);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: width 0.22s ease, height 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+  }
+
+  .chapter-progress-dot:hover .chapter-progress-dot-core,
+  .chapter-progress-dot[aria-current='step'] .chapter-progress-dot-core {
+    width: 9px;
+    height: 9px;
+    background: var(--chapter-color);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--chapter-color), transparent 38%);
+  }
+
+  .chapter-progress-tooltip {
+    position: absolute;
+    top: 50%;
+    right: 26px;
+    display: flex;
+    min-width: 118px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 6px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+    background: rgba(5, 8, 12, 0.72);
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'LXGW WenKai', '霞鹜文楷', cursive;
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(8px, -50%);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .chapter-progress-tooltip strong {
+    color: var(--chapter-color);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+  }
+
+  .chapter-progress-dot:hover .chapter-progress-tooltip,
+  .chapter-progress-dot:focus-visible .chapter-progress-tooltip,
+  .chapter-progress-dot[aria-current='step'] .chapter-progress-tooltip {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+
+  .chapter-progress-dot:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.75);
+    outline-offset: 3px;
+  }
+
+  .chapter-progress-mobile {
+    position: fixed;
+    right: 16px;
+    bottom: 92px;
+    left: 16px;
+    z-index: 45;
+    display: none;
+    pointer-events: none;
+  }
+
+  .chapter-progress-mobile-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.74);
+    font-family: 'LXGW WenKai', '霞鹜文楷', cursive;
+    font-size: 12px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+  }
+
+  .chapter-progress-mobile-meta span {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+  }
+
+  .chapter-progress-mobile-meta strong {
+    overflow: hidden;
+    font-weight: 400;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chapter-progress-mobile-track {
+    height: 2px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .chapter-progress-mobile-track span {
+    display: block;
+    height: 100%;
+    transition: width 0.35s ease, background-color 0.35s ease;
+  }
+
+  @media (max-width: 860px) {
+    .chapter-progress-nav {
+      display: none;
+    }
+
+    .chapter-progress-mobile {
+      display: block;
+    }
+  }
 }

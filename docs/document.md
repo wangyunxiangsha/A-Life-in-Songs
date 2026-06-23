@@ -50,10 +50,11 @@
 [✅] 18 章 BGM + 章节插画
 [✅] 氛围 BGM + 音频互斥
 [✅] 角色卡分页 + 章节小图肖像
-[✅] 首屏视频 + 第 1、7 章背景视频
+[✅] 首屏视频 + 第 1、2、3、7、12 章背景视频
+[✅] 章节圆点导航 + 移动端进度提示
 [✅] GitHub 同步
 [✅] Zeabur 预览部署
-[⏳] 第 2–6、8–18 章背景视频（可选）
+[⏳] 第 4–6、8–11、13–18 章背景视频（可选）
 [⏳] About 区块
 [⏳] 角色语音
 ```
@@ -66,5 +67,6 @@
 | 音频互斥 | `src/lib/audioManager.ts` | readme.md §音频系统 |
 | 氛围音乐 | `context/AmbientMusicContext.tsx` | plan.md §站点基本信息 |
 | 章节故事 UI | `sections/Seasons.tsx` | talk.md 会话六 |
+| 章节进度导航 | `components/ChapterProgressNav.tsx` + `lib/chapterProgress.ts` | plan.md §改进计划 |
 | 角色卡分页 | `sections/Companions.tsx` | talk.md 会话五 |
 | 背景视频 | `sections/VideoBackground.tsx` + `resolveChapterVideo` | readme.md §背景视频策略 |

@@ -71,6 +71,7 @@ export default function Seasons() {
         return (
         <div
           key={chapter.id}
+          id={`chapter-${chapter.id}`}
           ref={(el) => { chapterRefs.current[i] = el; }}
           className="relative min-h-[100dvh] flex items-center justify-center px-[5vw] py-[clamp(4rem,12vh,8rem)] mb-[clamp(2rem,8vh,5rem)]"
         >
